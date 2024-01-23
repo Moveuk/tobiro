@@ -6,18 +6,23 @@ import com.sparta.tobiro.domain.accommodation.service.AccommodationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/back-office")
 class BackOfficeController(
     private val accommodationService: AccommodationService
 ) {
+    @GetMapping("/my-accommodation")
+    fun getMyAccommodation(
+        authentication: Authentication?
+    ): ResponseEntity<AccommodationResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(accommodationService.getMyAccommodation(authentication))
+    }
 
-    @PostMapping("/accommodations")
+    @PostMapping("/my-accommodation")
     fun updateMyAccommodation(
         @RequestBody request: UpdateAccommodationRequest,
         authentication: Authentication?
