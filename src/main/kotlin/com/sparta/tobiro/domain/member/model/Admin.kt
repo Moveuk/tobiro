@@ -1,5 +1,6 @@
 package com.sparta.tobiro.domain.member.model
 
+import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
@@ -18,12 +19,8 @@ class Admin(
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     var role: Role = Role.ADMIN,
-
-
-    ) {
-
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
-
 }

@@ -1,11 +1,11 @@
 package com.sparta.tobiro.domain.member.model
 
+import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 
 @Entity
-@Table(name = "Member")
+@Table(name = "member")
 class Member(
 
     @Column(name = "name", nullable = false)
@@ -17,8 +17,8 @@ class Member(
     @Column(name = "password", nullable = false)
     var password: String,
 
-    @Column(name = "profile_Pic_url", nullable = false)
-    var profile_Pic_Url: String = "https://imgur.com/S8jQ6wN",
+    @Column(name = "profile_pic_url", nullable = false)
+    var profilePicUrl: String = "https://imgur.com/S8jQ6wN",
 
     @Column(name = "introduction", nullable = false)
     var introduction: String,
@@ -26,17 +26,11 @@ class Member(
     @Column(name = "tlno")
     var tlno: String,
 
-    @Column(name = "created_date")
-    var createdDate: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "modified_date")
-    var modifiedDate: LocalDateTime = LocalDateTime.now(),
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     var role: Role = Role.MEMBER
 
-) {
+) : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
