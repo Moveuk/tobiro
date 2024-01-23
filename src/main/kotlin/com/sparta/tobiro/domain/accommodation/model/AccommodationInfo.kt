@@ -1,11 +1,11 @@
 package com.sparta.tobiro.domain.accommodation.model
 
 import com.sparta.tobiro.domain.member.model.Owner
+import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
-@Table(name="accommodation_info")
+@Table(name = "accommodation_info")
 class AccommodationInfo(
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,15 +29,8 @@ class AccommodationInfo(
     var name: String,
 
     @Column(name = "description", nullable = false)
-    var description: String,
-
-    @Column(name = "created_date", nullable = false)
-    val createdDate: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "modified_date", nullable = false)
-    var modifiedDate: LocalDateTime = LocalDateTime.now(),
-
-    ) {
+    var description: String
+    ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

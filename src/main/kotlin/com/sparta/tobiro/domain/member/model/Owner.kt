@@ -1,10 +1,10 @@
 package com.sparta.tobiro.domain.member.model
 
+import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
-@Table
+@Table(name = "owner")
 class Owner(
 
     @Column(name = "email", nullable = false)
@@ -25,19 +25,13 @@ class Owner(
     @Column(name = "tlno")
     var tlno: String,
 
-    @Column(name = "adress")
-    var adress: String,
-
-    @Column(name = "created_Date")
-    val createdDate: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "modified_Date")
-    val modifiedDate: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "address")
+    var address: String,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     var role: Role = Role.OWNER
-) {
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
