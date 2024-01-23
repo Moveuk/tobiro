@@ -1,12 +1,13 @@
 package com.sparta.tobiro.domain.accommodation.model
 
+import com.sparta.tobiro.api.accommodation.dto.request.UpdateAccommodationRequest
 import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "accommodation_info")
-class AccommodationInfo(
+@Table(name = "accommodation")
+class Accommodation(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
@@ -34,4 +35,12 @@ class AccommodationInfo(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun update(updateAccommodationRequest: UpdateAccommodationRequest) {
+        category = updateAccommodationRequest.category
+        address = updateAccommodationRequest.address
+        tlno = updateAccommodationRequest.tlno
+        name = updateAccommodationRequest.name
+        description = updateAccommodationRequest.description
+    }
 }
