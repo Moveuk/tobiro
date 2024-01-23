@@ -1,5 +1,6 @@
 package com.sparta.tobiro.domain.accommodation.model
 
+import com.sparta.tobiro.domain.member.model.Owner
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -7,10 +8,11 @@ import java.time.LocalDateTime
 @Table(name="accommodation_info")
 class AccommodationInfo(
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "owner_id")
-//    var parent: Owner?,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    var owner: Owner,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
     var category: Category,
 
@@ -30,7 +32,7 @@ class AccommodationInfo(
     var description: String,
 
     @Column(name = "created_date", nullable = false)
-    var createdDate: LocalDateTime = LocalDateTime.now(),
+    val createdDate: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "modified_date", nullable = false)
     var modifiedDate: LocalDateTime = LocalDateTime.now(),
