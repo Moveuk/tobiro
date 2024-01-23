@@ -2,7 +2,6 @@ package com.sparta.tobiro.api.accommodation.dto.response
 
 import com.sparta.tobiro.domain.accommodation.model.Accommodation
 import com.sparta.tobiro.domain.accommodation.model.Category
-import com.sparta.tobiro.domain.member.model.Owner
 
 data class AccommodationResponse(
     val id: Long,
@@ -25,16 +24,4 @@ data class AccommodationResponse(
             )
         }
     }
-
-    fun to(owner: Owner): Accommodation {
-        return Accommodation(
-            owner = owner,
-            category = category,
-            address = address,
-            tlno = tlno,
-            name = name,
-            description = description
-        )
-    }
-
 }
