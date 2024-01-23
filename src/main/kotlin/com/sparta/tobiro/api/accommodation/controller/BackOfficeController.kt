@@ -17,8 +17,16 @@ class BackOfficeController(
     private val accommodationService: AccommodationService,
     private val roomService: RoomService,
 ) {
+    @GetMapping("/my-accommodation")
+    fun getMyAccommodation(
+        authentication: Authentication?
+    ): ResponseEntity<AccommodationResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(accommodationService.getMyAccommodation(authentication))
+    }
 
-    @PutMapping("/accommodations")
+    @PostMapping("/my-accommodation")
     fun updateMyAccommodation(
         @RequestBody request: UpdateAccommodationRequest,
         authentication: Authentication?

@@ -2,12 +2,11 @@ package com.sparta.tobiro.api.member.controller
 
 import com.sparta.tobiro.domain.member.dto.MemberResponse
 import com.sparta.tobiro.domain.member.dto.MemberSignUpRequest
+import com.sparta.tobiro.domain.member.dto.UpdateMemberProfileRequest
 import com.sparta.tobiro.domain.member.service.MemberService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -20,7 +19,20 @@ class MemberController(
             .status(HttpStatus.OK)
             .body(memberService.signUp(signUpRequest))
     }
+
+    @PutMapping("/api/v1/{memberId}/profile")
+    fun updateMemberProfile(
+        @PathVariable memberId:Long,
+        @RequestBody updateMemberProfileRequest: UpdateMemberProfileRequest
+    ): ResponseEntity<MemberResponse>{
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberService.updateMemberProfile(memberId,updateMemberProfileRequest))
+    }
 }
+
+
+
 
 
 /*
