@@ -18,7 +18,7 @@ data class OwnerResponse(
 
     var businessNumber: String,
 
-    //var profilePicUrl: String = "https://imgur.com/S8jQ6wN",
+    //var profilePicUrl: MultiPartFile
 
 
 )
