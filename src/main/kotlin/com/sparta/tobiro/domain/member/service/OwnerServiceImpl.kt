@@ -45,7 +45,6 @@ class OwnerServiceImpl(
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)
         owner.name = request.name
         owner.email = request.email
-        owner.password = request.password
         owner.introduction = request.introduction
         owner.tlno = request.tlno
         owner.address = request.address

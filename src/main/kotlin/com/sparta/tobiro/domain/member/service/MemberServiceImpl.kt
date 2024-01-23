@@ -42,10 +42,11 @@ class MemberServiceImpl(
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
         member.name = request.name
         member.email = request.email
-        member.password = request.password
         member.introduction = request.introduction
         member.tlno = request.tlno
         return memberRepository.save(member).toResponse()
     }
 }
+
+//Password API 분리 하기
 
