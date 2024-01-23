@@ -1,6 +1,6 @@
 package com.sparta.tobiro.domain.reservation.model
 
-import com.sparta.tobiro.domain.accommodation.model.RoomInfo
+import com.sparta.tobiro.domain.accommodation.model.Room
 import com.sparta.tobiro.domain.member.model.Member
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
@@ -27,7 +27,7 @@ class Reservation(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_info_id", nullable = false)
-    var roomInfo: RoomInfo,
+    var room: Room,
 
     ) : BaseTimeEntity() {
     @Id

@@ -1,15 +1,15 @@
 package com.sparta.tobiro.domain.accommodation.model
 
+import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
-@Table(name="room_info")
-class RoomInfo(
+@Table(name = "room")
+class Room(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    var accommodationInfo: AccommodationInfo,
+    var accommodation: Accommodation,
 
     @Column(name = "room_pic_urls", nullable = false)
     var roomPicUrls: String = "https://imgur.com/a/tBAKHUn",
@@ -24,14 +24,8 @@ class RoomInfo(
     var description: String,
 
     @Column(name = "max_occupancy", nullable = false)
-    var maxOccupancy: Int,
-
-    @Column(name = "created_date", nullable = false)
-    var createdDate: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "modified_date", nullable = false)
-    var modifiedDate: LocalDateTime = LocalDateTime.now(),
-    ) {
+    var maxOccupancy: Int
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
