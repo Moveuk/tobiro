@@ -1,5 +1,6 @@
 package com.sparta.tobiro.domain.member.model
 
+import com.sparta.tobiro.domain.member.dto.MemberResponse
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -17,14 +18,15 @@ class Member(
     @Column(name = "password", nullable = false)
     var password: String,
 
-    @Column(name = "profile_pic_url", nullable = false)
-    var profilePicUrl: String = "https://imgur.com/S8jQ6wN",
-
     @Column(name = "introduction", nullable = false)
     var introduction: String,
 
     @Column(name = "tlno")
     var tlno: String,
+
+    //  @Column(name = "profile_pic_url", nullable = false)
+    // var profilePicUrl: MultiPartFile ,
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -38,3 +40,13 @@ class Member(
 
 }
 
+fun Member.toResponse(): MemberResponse {
+    return MemberResponse(
+        id = id!!,
+        name = name,
+        email = email,
+        role = role.name,
+        introduction = introduction,
+        tlno = tlno,
+    )
+}

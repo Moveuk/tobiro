@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-class SecurityConfig() {
+class SecurityConfig {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -20,6 +20,8 @@ class SecurityConfig() {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers(
+                    "/api/v1/member/signup",
+                    "/api/v1/back-office/owner/signup",
                     "/test",
                     "/login",
                     "/join",
