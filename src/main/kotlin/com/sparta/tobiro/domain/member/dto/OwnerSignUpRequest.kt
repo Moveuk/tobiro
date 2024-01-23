@@ -18,5 +18,5 @@ data class OwnerSignUpRequest(
 
     var businessNumber: String,
 
-    // var profilePicUrl: MultiPartFile
+    // var profilePic: MultiPartFile
 )

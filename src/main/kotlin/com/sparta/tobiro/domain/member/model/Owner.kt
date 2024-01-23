@@ -30,7 +30,7 @@ class Owner(
     var businessNumber: String,
 
     //   @Column(name = "profile_pic_url", nullable = false)
-    //   var profilePicUrl : MultiPartFile ,
+    //   var profilePicUrl : String ,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)

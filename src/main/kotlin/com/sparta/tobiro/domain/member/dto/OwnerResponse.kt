@@ -18,7 +18,7 @@ data class OwnerResponse(
 
     var businessNumber: String,
 
-    //var profilePicUrl: MultiPartFile
+    //var profilePicUrl: String,
 
 
 )
