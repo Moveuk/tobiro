@@ -8,6 +8,7 @@ import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
 import com.sparta.tobiro.domain.member.repository.MemberRepository
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.global.exception.RoleNotFoundException
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -32,7 +33,7 @@ class MemberServiceImpl(
                 name = request.name,
                 role = when (request.role) {
                     Role.MEMBER.name -> Role.MEMBER
-                    else -> throw IllegalArgumentException("Invalid role")
+                    else -> throw RoleNotFoundException("MEMBER")
                 }
             )
         ).toResponse()

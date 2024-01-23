@@ -22,9 +22,6 @@ class SecurityConfig {
                 it.requestMatchers(
                     "/api/v1/member/signup",
                     "/api/v1/back-office/owner/signup",
-                    "/test",
-                    "/login",
-                    "/join",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                 )
