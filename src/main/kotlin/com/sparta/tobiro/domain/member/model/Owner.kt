@@ -1,6 +1,6 @@
 package com.sparta.tobiro.domain.member.model
 
-import com.sparta.tobiro.domain.member.dto.OwnerResponse
+import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 

@@ -1,6 +1,10 @@
 package com.sparta.tobiro.domain.member.service
 
-import com.sparta.tobiro.domain.member.dto.*
+import com.sparta.tobiro.domain.member.dto.request.LoginRequest
+import com.sparta.tobiro.domain.member.dto.request.MemberSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
+import com.sparta.tobiro.domain.member.dto.response.LoginResponse
+import com.sparta.tobiro.domain.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.model.Member
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
@@ -23,12 +27,11 @@ class MemberServiceImpl(
     override fun login(request: LoginRequest): LoginResponse {
         val member = memberRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Member")
         if (member.role.name != request.role) {
-            throw InvalidCredentialException("MEMBER")
+            throw InvalidCredentialException()
         }
         if (!passwordEncoder.matches(request.password, member.password)) {
-            throw InvalidCredentialException("password")
+            throw InvalidCredentialException()
         }
-
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
                 subject = member.id.toString(),
@@ -60,10 +63,7 @@ class MemberServiceImpl(
     }
 
     override fun updateMemberProfile(memberId: Long, request: UpdateMemberProfileRequest): MemberResponse {
-
-
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
-
         member.name = request.name
         member.email = request.email
         member.introduction = request.introduction

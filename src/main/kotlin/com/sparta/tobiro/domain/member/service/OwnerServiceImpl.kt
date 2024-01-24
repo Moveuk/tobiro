@@ -1,6 +1,10 @@
 package com.sparta.tobiro.domain.member.service
 
-import com.sparta.tobiro.domain.member.dto.*
+import com.sparta.tobiro.domain.member.dto.request.LoginRequest
+import com.sparta.tobiro.domain.member.dto.request.OwnerSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerProfileRequest
+import com.sparta.tobiro.domain.member.dto.response.LoginResponse
+import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
@@ -19,7 +23,22 @@ class OwnerServiceImpl(
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin,
 ) : OwnerService {
-
+    override fun login(request: LoginRequest): LoginResponse {
+        val owner = ownerRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Owner")
+        if (owner.role.name != request.role) {
+            throw InvalidCredentialException()
+        }
+        if (!passwordEncoder.matches(request.password, owner.password)) {
+            throw InvalidCredentialException()
+        }
+        return LoginResponse(
+            accessToken = jwtPlugin.generateAccessToken(
+                subject = owner.id.toString(),
+                email = owner.email,
+                role = owner.role.name
+            )
+        )
+    }
     @Transactional
     override fun signUp(request: OwnerSignUpRequest): OwnerResponse {
         if (ownerRepository.existsByEmail(request.email)) {
@@ -53,22 +72,5 @@ class OwnerServiceImpl(
         owner.businessNumber = request.businessNumber
         return ownerRepository.save(owner).toResponse()
     }
-
-    override fun login(request: LoginRequest): LoginResponse {
-        val owner = ownerRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Owner")
-        if(owner.role.name != request.role ){ throw InvalidCredentialException("OWNER")
-        }
-        if (!passwordEncoder.matches(request.password,owner.password)){ throw InvalidCredentialException("password")
-        }
-
-        return LoginResponse(
-            accessToken = jwtPlugin.generateAccessToken(
-                subject = owner.id.toString(),
-                email = owner.email,
-                role = owner.role.name
-            )
-        )
-    }
-
 
 }
