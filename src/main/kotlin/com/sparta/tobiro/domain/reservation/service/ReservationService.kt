@@ -51,7 +51,7 @@ class ReservationService(
         val findMember = memberRepository.findByIdOrNull(memberPrincipal.id)
         findMember ?: throw ModelNotFoundException("Member", memberPrincipal.id)
 
-        if (findRoom.maxOccupancy < request.occupancy) throw IllegalArgumentException("수용인원 값은 방의 최대 수용인원 ${findRoom.maxOccupancy}보다 클 수 있습니다.")
+        if (findRoom.maxOccupancy < request.occupancy) throw IllegalArgumentException("수용인원 값은 방의 최대 수용인원 ${findRoom.maxOccupancy}보다 클 수 없습니다.")
 
         return ReservationResponse.from(reservationRepository.save(request.to(findMember, findRoom)))
     }
