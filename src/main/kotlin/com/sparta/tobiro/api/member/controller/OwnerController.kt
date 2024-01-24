@@ -7,6 +7,7 @@ import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerProfileRequest
 import com.sparta.tobiro.domain.member.dto.response.LoginResponse
 import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.domain.member.service.OwnerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -25,7 +26,7 @@ class OwnerController(
             .body(ownerService.login(loginRequest))
     }
     @PostMapping("/signup")
-    fun signup(@RequestBody signUpRequest: OwnerSignUpRequest): ResponseEntity<OwnerResponse> {
+    fun signup(@Valid  @RequestBody signUpRequest: OwnerSignUpRequest): ResponseEntity<OwnerResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(ownerService.signUp(signUpRequest))
