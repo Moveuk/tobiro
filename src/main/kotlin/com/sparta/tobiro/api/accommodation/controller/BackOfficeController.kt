@@ -2,6 +2,7 @@ package com.sparta.tobiro.api.accommodation.controller
 
 import com.sparta.tobiro.api.accommodation.dto.request.CreateRoomRequest
 import com.sparta.tobiro.api.accommodation.dto.request.UpdateAccommodationRequest
+import com.sparta.tobiro.api.accommodation.dto.request.UpdateRoomRequest
 import com.sparta.tobiro.api.accommodation.dto.response.AccommodationResponse
 import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.service.AccommodationService
@@ -46,7 +47,7 @@ class BackOfficeController(
         authentication: Authentication?,
     ): ResponseEntity<Page<RoomResponse>> {
         return ResponseEntity
-            .status(HttpStatus.CREATED)
+            .status(HttpStatus.OK)
             .body(roomService.getRooms(accommodationId, pageable, authentication))
     }
 
@@ -55,7 +56,7 @@ class BackOfficeController(
         @PathVariable roomId: Long,
     ): ResponseEntity<RoomResponse> {
         return ResponseEntity
-            .status(HttpStatus.CREATED)
+            .status(HttpStatus.OK)
             .body(roomService.getRoom(roomId))
     }
 
@@ -68,5 +69,16 @@ class BackOfficeController(
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(roomService.createRoom(accommodationId, request))
+    }
+
+    @PutMapping("/accommodations/{accommodationId}/rooms/{roomId}")
+    fun updateRoom(
+        @PathVariable roomId: Long,
+        @RequestBody request: UpdateRoomRequest,
+        authentication: Authentication?,
+    ): ResponseEntity<RoomResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(roomService.updateRoom(roomId, request))
     }
 }

@@ -1,6 +1,7 @@
 package com.sparta.tobiro.domain.accommodation.service
 
 import com.sparta.tobiro.api.accommodation.dto.request.CreateRoomRequest
+import com.sparta.tobiro.api.accommodation.dto.request.UpdateRoomRequest
 import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.accommodation.repository.RoomRepository
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RoomService(
@@ -41,6 +43,7 @@ class RoomService(
         return RoomResponse.from(findRoom)
     }
 
+    @Transactional
     fun createRoom(accommodationId: Long, request: CreateRoomRequest): RoomResponse {
         val findAccommodation =
             accommodationRepository
@@ -50,6 +53,20 @@ class RoomService(
             RoomResponse.from(it)
         }
 
+    }
+
+    @Transactional
+    fun updateRoom(roomId: Long, request: UpdateRoomRequest): RoomResponse {
+        //TODO: ADMIN의 경우 생각해서 인증 인가 기능 추가 후 authenication에서 꺼내 사용함.
+        val userPrincipalId = 1L
+
+        val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
+
+        if (findRoom.accommodation.owner.id != userPrincipalId) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
+
+        findRoom.update(request)
+
+        return RoomResponse.from(findRoom)
     }
 
 }
