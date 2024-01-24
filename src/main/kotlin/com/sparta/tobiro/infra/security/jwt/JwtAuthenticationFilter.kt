@@ -25,12 +25,11 @@ class JwtAuthenticationFilter(
         if (jwt != null){
             jwtPlugin.validateToken(jwt)
                 .onSuccess {
-                    val memberId = it.payload.subject.toLong()
-                    val ownerId = it.payload.subject.toLong()
+                    val userId = it.payload.subject.toLong()
                     val role = it.payload.get("role", String::class.java)
                     val email = it.payload.get("email", String::class.java)
                     val principal = UserPrincipal(
-                        id = memberId,
+                        id = userId,
                         email = email,
                         roles = setOf(role)
                     )

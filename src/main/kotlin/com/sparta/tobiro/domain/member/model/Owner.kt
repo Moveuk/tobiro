@@ -4,7 +4,7 @@ import com.sparta.tobiro.domain.accommodation.model.Accommodation
 import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
+
 
 @Entity
 @Table(name = "owner")
