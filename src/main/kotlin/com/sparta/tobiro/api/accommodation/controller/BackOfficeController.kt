@@ -50,6 +50,15 @@ class BackOfficeController(
             .body(roomService.getRooms(accommodationId, pageable, authentication))
     }
 
+    @GetMapping("/accommodations/{accommodationId}/rooms/{roomId}")
+    fun getRoom(
+        @PathVariable roomId: Long,
+    ): ResponseEntity<RoomResponse> {
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(roomService.getRoom(roomId))
+    }
+
     @PostMapping("/accommodations/{accommodationId}/rooms")
     fun createRoom(
         @PathVariable accommodationId: Long,

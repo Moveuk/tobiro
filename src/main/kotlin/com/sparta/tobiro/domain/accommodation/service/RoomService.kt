@@ -19,7 +19,7 @@ class RoomService(
     private val accommodationRepository: AccommodationRepository
 ) {
     fun getRooms(accommodationId: Long, pageable: Pageable, authentication: Authentication?): Page<RoomResponse> {
-        //TODO: 인증 인가 후 authenication에서 꺼내 사용함.
+        //TODO: ADMIN의 경우 생각해서 인증 인가 기능 추가 후 authenication에서 꺼내 사용함.
         val userPrincipalId = 1L
         val findAccommodation =
             accommodationRepository
@@ -33,6 +33,12 @@ class RoomService(
             if (it.content.size == 0) throw BadRequestException("객실을 먼저 추가해주세요.")
             it
         }
+    }
+
+    fun getRoom(roomId: Long): RoomResponse {
+        //TODO: ADMIN의 경우 생각해서 인증 인가 기능 추가 후 authenication에서 꺼내 사용함.
+        val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
+        return RoomResponse.from(findRoom)
     }
 
     fun createRoom(accommodationId: Long, request: CreateRoomRequest): RoomResponse {
