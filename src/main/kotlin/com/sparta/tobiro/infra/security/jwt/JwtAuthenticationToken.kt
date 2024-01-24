@@ -1,11 +1,11 @@
 package com.sparta.tobiro.infra.security.jwt
 
-import com.sparta.tobiro.infra.security.MemberPrincipal
+import com.sparta.tobiro.infra.security.UserPrincipal
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.web.authentication.WebAuthenticationDetails
 
 class JwtAuthenticationToken(
-    private val principal: MemberPrincipal,
+    private val principal: UserPrincipal,
     details: WebAuthenticationDetails
 ) : AbstractAuthenticationToken(principal.authorities) {
     init {

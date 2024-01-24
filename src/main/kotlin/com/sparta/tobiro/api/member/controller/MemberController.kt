@@ -13,33 +13,30 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
+@RequestMapping("/api/v1/members")
 class MemberController(
     private val memberService: MemberService
 ) {
-
-
-    @PostMapping("/api/v1/member/login")
+    @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(memberService.login(loginRequest))
     }
-
-    @PostMapping("/api/v1/member/signup")
+    @PostMapping("/signup")
     fun signUp(@RequestBody signUpRequest: MemberSignUpRequest): ResponseEntity<MemberResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(memberService.signUp(signUpRequest))
     }
-
     @PreAuthorize("hasRole('MEMBER')")
-    @PutMapping("/api/v1/{memberId}/profile")
-    fun updateMemberProfile(
-        @PathVariable memberId: Long,
+    @PutMapping("/{memberId}/profile")
+    fun updateOwnerProfile(
+        @PathVariable memberId:Long,
         @RequestBody updateMemberProfileRequest: UpdateMemberProfileRequest
-    ): ResponseEntity<MemberResponse> {
+    ): ResponseEntity<MemberResponse>{
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(memberService.updateMemberProfile(memberId, updateMemberProfileRequest))
+            .body(memberService.updateMemberProfile(memberId,updateMemberProfileRequest))
     }
 }

@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface OwnerRepository : JpaRepository<Owner, Long> {
     fun existsByEmail(email: String): Boolean
     fun findByEmail(email:String) : Owner?
+    fun existsByBusinessNumber(businessNumber : String): Boolean
 }

@@ -1,5 +1,7 @@
 package com.sparta.tobiro.domain.member.service
 
+import com.sparta.tobiro.domain.accommodation.model.Accommodation
+import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.member.dto.request.LoginRequest
 import com.sparta.tobiro.domain.member.dto.request.OwnerSignUpRequest
 import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerProfileRequest
@@ -11,15 +13,18 @@ import com.sparta.tobiro.domain.member.model.toResponse
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class OwnerServiceImpl(
     private val ownerRepository: OwnerRepository,
+    private val accommodationRepository: AccommodationRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin,
 ) : OwnerService {
@@ -39,14 +44,16 @@ class OwnerServiceImpl(
             )
         )
     }
+
     @Transactional
     override fun signUp(request: OwnerSignUpRequest): OwnerResponse {
         if (ownerRepository.existsByEmail(request.email)) {
             throw IllegalStateException("이메일이 이미 사용중 입니다.")
         }
-        return ownerRepository.save(
-            Owner(
-                //패스워드 암호화하기
+        if (ownerRepository.existsByBusinessNumber(request.businessNumber)) {
+            throw IllegalStateException("사업자번호가 이미 존재 합니다.")
+        }
+        val owner = Owner(
                 password = passwordEncoder.encode(request.password),
                 email = request.email,
                 introduction = request.introduction,
@@ -54,15 +61,30 @@ class OwnerServiceImpl(
                 name = request.name,
                 address = request.address,
                 businessNumber = request.businessNumber,
-                role = when (request.role) {
+                role = when(request.role){
                     Role.OWNER.name -> Role.OWNER
                     else -> throw IllegalArgumentException("잘못된 role을 입력하셨습니다.")
                 }
             )
-        ).toResponse()
+        val accommodation = accommodationRepository.save(
+            Accommodation(
+                owner = owner,
+                category = request.category,
+                accommodationPicUrls = "https://imgur.com/a/tBAKHUn",
+                address = request.address,
+                tlno = request.tlno,
+                name = request.name,
+                description = request.description
+            )
+        )
+        return ownerRepository.save(owner).toResponse()
     }
 
     override fun updateOwnerProfile(ownerId: Long, request: UpdateOwnerProfileRequest): OwnerResponse {
+        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
+        if(ownerId != authenticatedId) {
+            throw IllegalArgumentException("프로필 수정 권한이 없습니다")
+        }
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)
         owner.name = request.name
         owner.email = request.email
