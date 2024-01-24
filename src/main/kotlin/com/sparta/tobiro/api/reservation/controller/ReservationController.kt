@@ -18,11 +18,13 @@ class ReservationController(
         @RequestBody createReservationRequest: CreateReservationRequest
     ): ResponseEntity<ReservationResponse> {
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reservationService.createReservation(createReservationRequest))
             .status(HttpStatus.CREATED)
             .body(reservationService.createReservation(createReservationRequest))
     }
 
+    @DeleteMapping("/{reservationId}")
+    fun deleteReservation(@PathVariable reservationId: Long): ResponseEntity<Unit>{
+        reservationService.deleteReservation(reservationId)
+        return ResponseEntity.noContent().build()
     }
 }

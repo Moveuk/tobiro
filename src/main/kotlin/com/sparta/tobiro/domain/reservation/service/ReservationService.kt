@@ -5,6 +5,7 @@ import com.sparta.tobiro.domain.member.repository.MemberRepository
 import com.sparta.tobiro.domain.reservation.dto.CreateReservationRequest
 import com.sparta.tobiro.domain.reservation.dto.ReservationResponse
 import com.sparta.tobiro.domain.reservation.repository.ReservationRepository
+import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
 import com.sparta.tobiro.infra.security.UserPrincipal
 import org.springframework.data.repository.findByIdOrNull
@@ -54,5 +55,19 @@ class ReservationService(
         if (findRoom.maxOccupancy < request.occupancy) throw IllegalArgumentException("수용인원 값은 방의 최대 수용인원 ${findRoom.maxOccupancy}보다 클 수 없습니다.")
 
         return ReservationResponse.from(reservationRepository.save(request.to(findMember, findRoom)))
+    }
+
+    fun deleteReservation(reservationId: Long) {
+        val findReservation =
+            reservationRepository.findByIdOrNull(reservationId) ?: throw ModelNotFoundException(
+                "Reservation",
+                reservationId
+            )
+
+        (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).let {
+            if (findReservation.member.id != it.id) throw InvalidCredentialException()
+        }
+
+        reservationRepository.delete(findReservation)
     }
 }
