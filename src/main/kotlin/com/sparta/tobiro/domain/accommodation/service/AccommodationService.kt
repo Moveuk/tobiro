@@ -19,7 +19,7 @@ class AccommodationService(
         // TODO: 인증/인가 완료되면 principal에서 정보 꺼내와서 확인
         val principalId = 1L
         val findAccommodation = ownerRepository.findByIdOrNull(principalId).let {
-            accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation", null)
+            accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
         return AccommodationResponse.from(findAccommodation)
     }
@@ -29,7 +29,7 @@ class AccommodationService(
         // TODO: 인증/인가 완료되면 principal에서 정보 꺼내와서 확인
         val principalId = 1L
         val findAccommodation = ownerRepository.findByIdOrNull(principalId).let {
-            accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation", null)
+            accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
         findAccommodation.update(request)
 

@@ -1,5 +1,6 @@
 package com.sparta.tobiro.domain.accommodation.model
 
+import com.sparta.tobiro.api.accommodation.dto.request.UpdateRoomRequest
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -29,4 +30,12 @@ class Room(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun update(request: UpdateRoomRequest, _roomPicUrls: String = roomPicUrls) {
+        name = request.name
+        roomPicUrls = _roomPicUrls
+        price = request.price
+        description = request.description
+        maxOccupancy = request.maxOccupancy
+    }
 }
