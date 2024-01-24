@@ -81,4 +81,14 @@ class BackOfficeController(
             .status(HttpStatus.OK)
             .body(roomService.updateRoom(roomId, request))
     }
+
+    @DeleteMapping("/accommodations/{accommodationId}/rooms/{roomId}")
+    fun deleteRoom(
+        @PathVariable roomId: Long,
+        authentication: Authentication?,
+    ): ResponseEntity<String> {
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body(roomService.deleteRoom(roomId))
+    }
 }
