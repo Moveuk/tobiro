@@ -1,12 +1,16 @@
 package com.sparta.tobiro.domain.member.service
 
-import com.sparta.tobiro.domain.member.dto.*
+import com.sparta.tobiro.domain.member.dto.request.LoginRequest
+import com.sparta.tobiro.domain.member.dto.request.MemberSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
+import com.sparta.tobiro.domain.member.dto.response.LoginResponse
+import com.sparta.tobiro.domain.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.model.Member
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
 import com.sparta.tobiro.domain.member.repository.MemberRepository
+import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
-import com.sparta.tobiro.global.exception.RoleNotFoundException
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -21,10 +25,13 @@ class MemberServiceImpl(
 ) : MemberService {
 
     override fun login(request: LoginRequest): LoginResponse {
-        val member = memberRepository.findByEmail(request.email) ?: throw RoleNotFoundException("Email")
-        if(member.role.name != request.role ){ throw RoleNotFoundException("MEMBER")}
-        if (!passwordEncoder.matches(request.password,member.password)){ throw RoleNotFoundException("password")}
-
+        val member = memberRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Member")
+        if (member.role.name != request.role) {
+            throw InvalidCredentialException()
+        }
+        if (!passwordEncoder.matches(request.password, member.password)) {
+            throw InvalidCredentialException()
+        }
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
                 subject = member.id.toString(),
@@ -37,7 +44,7 @@ class MemberServiceImpl(
     @Transactional
     override fun signUp(request: MemberSignUpRequest): MemberResponse {
         if (memberRepository.existsByEmail(request.email)) {
-            throw IllegalArgumentException("Email is already in use")
+            throw IllegalStateException("이메일이 이미 사용중 입니다.")
         }
         return memberRepository.save(
             Member(
@@ -49,7 +56,7 @@ class MemberServiceImpl(
                 name = request.name,
                 role = when (request.role) {
                     Role.MEMBER.name -> Role.MEMBER
-                    else -> throw RoleNotFoundException("MEMBER")
+                    else -> throw IllegalArgumentException("잘못된 role을 입력하셨습니다.")
                 }
             )
         ).toResponse()
