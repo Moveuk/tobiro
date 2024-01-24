@@ -1,12 +1,12 @@
-package com.sparta.tobiro.domain.member.dto
+package com.sparta.tobiro.domain.member.dto.request
 
-data class OwnerResponse(
-
-    var id: Long,
+data class OwnerSignUpRequest(
 
     var name: String,
 
     var email: String,
+
+    var password: String,
 
     var introduction: String,
 
@@ -18,7 +18,5 @@ data class OwnerResponse(
 
     var businessNumber: String,
 
-    //var profilePicUrl: String,
-
-
+    // var profilePic: MultiPartFile
 )
