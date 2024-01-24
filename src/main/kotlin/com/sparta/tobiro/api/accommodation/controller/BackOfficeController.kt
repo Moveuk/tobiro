@@ -29,6 +29,16 @@ class BackOfficeController(
             .body(accommodationService.getMyAccommodation(authentication))
     }
 
+    @PutMapping("/my-accommodation")
+    fun updateMyAccommodation(
+        @RequestBody request: UpdateAccommodationRequest,
+        authentication: Authentication?
+    ): ResponseEntity<AccommodationResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(accommodationService.updateMyAccommodation(authentication, request))
+    }
+
     @GetMapping("/accommodations/{accommodationId}/rooms")
     fun getRooms(
         @PathVariable accommodationId: Long,
@@ -38,16 +48,6 @@ class BackOfficeController(
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(roomService.getRooms(accommodationId, pageable, authentication))
-    }
-
-    @PostMapping("/my-accommodation")
-    fun updateMyAccommodation(
-        @RequestBody request: UpdateAccommodationRequest,
-        authentication: Authentication?
-    ): ResponseEntity<AccommodationResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(accommodationService.updateMyAccommodation(authentication, request))
     }
 
     @PostMapping("/accommodations/{accommodationId}/rooms")

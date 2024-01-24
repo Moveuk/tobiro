@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface CustomRoomRepository {
-    fun findAllByPageableAndAccommodationId(pageable: Pageable, accommodationId: Long): Page<Room>?
+    fun findAllByPageableAndAccommodationId(pageable: Pageable, accommodationId: Long): Page<Room>
 }

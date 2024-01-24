@@ -23,7 +23,7 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
     override fun findAllByPageableAndAccommodationId(
         pageable: Pageable,
         accommodationId: Long
-    ): Page<Room>? {
+    ): Page<Room> {
         val whereClause = BooleanBuilder()
 
         whereClause.and(room.accommodation.id.eq(accommodationId))

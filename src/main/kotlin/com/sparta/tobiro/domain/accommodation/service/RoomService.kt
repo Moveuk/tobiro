@@ -18,7 +18,7 @@ class RoomService(
     private val roomRepository: RoomRepository,
     private val accommodationRepository: AccommodationRepository
 ) {
-    fun getRooms(accommodationId: Long, pageable: Pageable, authentication: Authentication?): Page<RoomResponse>? {
+    fun getRooms(accommodationId: Long, pageable: Pageable, authentication: Authentication?): Page<RoomResponse> {
         //TODO: 인증 인가 후 authenication에서 꺼내 사용함.
         val userPrincipalId = 1L
         val findAccommodation =
@@ -27,9 +27,12 @@ class RoomService(
 
         if (findAccommodation.owner.id != userPrincipalId) throw UnauthorizedException("이 숙박업소에 대한 권한이 없습니다.")
 
-        return roomRepository.findAllByPageableAndAccommodationId(pageable, accommodationId)?.map {
+        return roomRepository.findAllByPageableAndAccommodationId(pageable, accommodationId).map {
             RoomResponse.from(it)
-        } ?: throw BadRequestException("객실을 먼저 추가해주세요.")
+        }.let {
+            if (it.content.size == 0) throw BadRequestException("객실을 먼저 추가해주세요.")
+            it
+        }
     }
 
     fun createRoom(accommodationId: Long, request: CreateRoomRequest): RoomResponse {
