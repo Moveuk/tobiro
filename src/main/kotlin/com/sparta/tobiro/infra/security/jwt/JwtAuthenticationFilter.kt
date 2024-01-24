@@ -29,6 +29,7 @@ class JwtAuthenticationFilter(
             jwtPlugin.validateToken(jwt)
                 .onSuccess {
                     val memberId = it.payload.subject.toLong()
+                    val ownerId = it.payload.subject.toLong()
                     val role = it.payload.get("role", String::class.java)
                     val email = it.payload.get("email", String::class.java)
                     val principal = MemberPrincipal(
@@ -41,6 +42,8 @@ class JwtAuthenticationFilter(
                         details = WebAuthenticationDetailsSource().buildDetails(request)
                     )
                     SecurityContextHolder.getContext().authentication = authentication
+                    request.setAttribute("memberId", memberId)
+                    request.setAttribute("ownerId", ownerId)
                 }
         }
         filterChain.doFilter(request,response)

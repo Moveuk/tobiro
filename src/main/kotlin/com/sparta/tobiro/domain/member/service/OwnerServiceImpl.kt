@@ -11,9 +11,11 @@ import com.sparta.tobiro.domain.member.model.toResponse
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.infra.security.MemberPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -63,6 +65,10 @@ class OwnerServiceImpl(
     }
 
     override fun updateOwnerProfile(ownerId: Long, request: UpdateOwnerProfileRequest): OwnerResponse {
+        val loggerInOwnerId: Long =(SecurityContextHolder.getContext().authentication.principal as MemberPrincipal).id
+        if(ownerId != loggerInOwnerId) {
+            throw IllegalArgumentException("프로필 수정 권한이 없습니다")
+        }
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)
         owner.name = request.name
         owner.email = request.email
