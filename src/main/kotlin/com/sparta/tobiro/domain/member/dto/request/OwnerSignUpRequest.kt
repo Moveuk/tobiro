@@ -1,5 +1,7 @@
 package com.sparta.tobiro.domain.member.dto.request
 
+import com.sparta.tobiro.domain.accommodation.model.Category
+
 data class OwnerSignUpRequest(
 
     var name: String,
@@ -18,5 +20,8 @@ data class OwnerSignUpRequest(
 
     var businessNumber: String,
 
+    var category : Category,
+
+    var description:String,
     // var profilePic: MultiPartFile
 )

@@ -13,24 +13,25 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 
+@RequestMapping("/api/v1/back-office/owners")
 @RestController
 class OwnerController(
     private val ownerService: OwnerService
 ) {
-    @PostMapping("/api/v1/owner/login")
+    @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest) : ResponseEntity<LoginResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(ownerService.login(loginRequest))
     }
-    @PostMapping("/api/v1/back-office/owner/signup")
+    @PostMapping("/signup")
     fun signup(@RequestBody signUpRequest: OwnerSignUpRequest): ResponseEntity<OwnerResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(ownerService.signUp(signUpRequest))
     }
     @PreAuthorize("hasRole('OWNER')")
-    @PutMapping("/api/v1/back-office/{ownerId}/profile")
+    @PutMapping("/{ownerId}/profile")
     fun updateOwnerProfile(
         @PathVariable ownerId:Long,
         @RequestBody updateOwnerProfileRequest: UpdateOwnerProfileRequest
