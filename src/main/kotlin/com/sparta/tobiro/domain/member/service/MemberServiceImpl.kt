@@ -65,8 +65,8 @@ class MemberServiceImpl(
     }
 
     override fun updateMemberProfile(memberId: Long, request: UpdateMemberProfileRequest): MemberResponse {
-        val loggerInMemberId: Long =(SecurityContextHolder.getContext().authentication.principal as MemberPrincipal).id
-        if(memberId != loggerInMemberId) {
+        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as MemberPrincipal).id
+        if(memberId != authenticatedId) {
             throw IllegalArgumentException("프로필 수정 권한이 없습니다")
         }
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)

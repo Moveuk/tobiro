@@ -46,9 +46,11 @@ class OwnerServiceImpl(
         if (ownerRepository.existsByEmail(request.email)) {
             throw IllegalStateException("이메일이 이미 사용중 입니다.")
         }
+
+
+
         return ownerRepository.save(
             Owner(
-                //패스워드 암호화하기
                 password = passwordEncoder.encode(request.password),
                 email = request.email,
                 introduction = request.introduction,
@@ -65,8 +67,8 @@ class OwnerServiceImpl(
     }
 
     override fun updateOwnerProfile(ownerId: Long, request: UpdateOwnerProfileRequest): OwnerResponse {
-        val loggerInOwnerId: Long =(SecurityContextHolder.getContext().authentication.principal as MemberPrincipal).id
-        if(ownerId != loggerInOwnerId) {
+        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as MemberPrincipal).id
+        if(ownerId != authenticatedId) {
             throw IllegalArgumentException("프로필 수정 권한이 없습니다")
         }
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)

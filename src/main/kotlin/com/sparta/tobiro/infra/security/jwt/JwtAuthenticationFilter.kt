@@ -42,8 +42,6 @@ class JwtAuthenticationFilter(
                         details = WebAuthenticationDetailsSource().buildDetails(request)
                     )
                     SecurityContextHolder.getContext().authentication = authentication
-                    request.setAttribute("memberId", memberId)
-                    request.setAttribute("ownerId", ownerId)
                 }
         }
         filterChain.doFilter(request,response)
