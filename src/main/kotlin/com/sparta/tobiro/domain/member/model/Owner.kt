@@ -1,10 +1,8 @@
 package com.sparta.tobiro.domain.member.model
 
-import com.sparta.tobiro.domain.accommodation.model.Accommodation
 import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
-
 
 @Entity
 @Table(name = "owner")
@@ -31,8 +29,7 @@ class Owner(
     @Column(name = "businessNumber")
     var businessNumber: String,
 
-    @OneToOne
-    var accommodation: Accommodation? = null,
+
 
     //   @Column(name = "profile_pic_url", nullable = false)
     //   var profilePicUrl : String ,

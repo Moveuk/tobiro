@@ -50,8 +50,8 @@ class OwnerServiceImpl(
         if (ownerRepository.existsByEmail(request.email)) {
             throw IllegalStateException("이메일이 이미 사용중 입니다.")
         }
-        if (ownerRepository.equals(request.businessNumber)) {
-            throw IllegalStateException("사업자번호가 존재 합니다.")
+        if (ownerRepository.existsByBusinessNumber(request.businessNumber)) {
+            throw IllegalStateException("사업자번호가 이미 존재 합니다.")
         }
         val owner = Owner(
                 password = passwordEncoder.encode(request.password),
@@ -77,7 +77,6 @@ class OwnerServiceImpl(
                 description = request.description
             )
         )
-        owner.accommodation = accommodation
         return ownerRepository.save(owner).toResponse()
     }
 
