@@ -5,8 +5,8 @@ import com.sparta.tobiro.domain.member.model.Member
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
 import com.sparta.tobiro.domain.member.repository.MemberRepository
+import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
-import com.sparta.tobiro.global.exception.RoleNotFoundException
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -21,9 +21,13 @@ class MemberServiceImpl(
 ) : MemberService {
 
     override fun login(request: LoginRequest): LoginResponse {
-        val member = memberRepository.findByEmail(request.email) ?: throw RoleNotFoundException("Email")
-        if(member.role.name != request.role ){ throw RoleNotFoundException("MEMBER")}
-        if (!passwordEncoder.matches(request.password,member.password)){ throw RoleNotFoundException("password")}
+        val member = memberRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Member")
+        if (member.role.name != request.role) {
+            throw InvalidCredentialException("MEMBER")
+        }
+        if (!passwordEncoder.matches(request.password, member.password)) {
+            throw InvalidCredentialException("password")
+        }
 
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
@@ -37,7 +41,7 @@ class MemberServiceImpl(
     @Transactional
     override fun signUp(request: MemberSignUpRequest): MemberResponse {
         if (memberRepository.existsByEmail(request.email)) {
-            throw IllegalArgumentException("Email is already in use")
+            throw IllegalStateException("이메일이 이미 사용중 입니다.")
         }
         return memberRepository.save(
             Member(
@@ -49,14 +53,17 @@ class MemberServiceImpl(
                 name = request.name,
                 role = when (request.role) {
                     Role.MEMBER.name -> Role.MEMBER
-                    else -> throw RoleNotFoundException("MEMBER")
+                    else -> throw IllegalArgumentException("잘못된 role을 입력하셨습니다.")
                 }
             )
         ).toResponse()
     }
 
     override fun updateMemberProfile(memberId: Long, request: UpdateMemberProfileRequest): MemberResponse {
+
+
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
+
         member.name = request.name
         member.email = request.email
         member.introduction = request.introduction

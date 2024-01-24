@@ -29,8 +29,8 @@ class GlobalExceptionHandler {
     fun handleInvalidCredentialException(e: InvalidCredentialException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse(e.message))
     }
-    @ExceptionHandler(RoleNotFoundException::class)
-    fun handleRoleNotFoundException(e: RoleNotFoundException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse(e.message))
+    @ExceptionHandler(IllegalStateException::class)
+    fun handleIllegalStateException(e: IllegalStateException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse(e.message))
     }
 }
