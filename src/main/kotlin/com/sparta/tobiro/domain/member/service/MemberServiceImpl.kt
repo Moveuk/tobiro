@@ -11,7 +11,7 @@ import com.sparta.tobiro.domain.member.model.toResponse
 import com.sparta.tobiro.domain.member.repository.MemberRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
-import com.sparta.tobiro.infra.security.MemberPrincipal
+import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -65,7 +65,7 @@ class MemberServiceImpl(
     }
 
     override fun updateMemberProfile(memberId: Long, request: UpdateMemberProfileRequest): MemberResponse {
-        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as MemberPrincipal).id
+        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
         if(memberId != authenticatedId) {
             throw IllegalArgumentException("프로필 수정 권한이 없습니다")
         }
