@@ -26,7 +26,7 @@ class Reservation(
     var member: Member,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_info_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false)
     var room: Room,
 
     ) : BaseTimeEntity() {
