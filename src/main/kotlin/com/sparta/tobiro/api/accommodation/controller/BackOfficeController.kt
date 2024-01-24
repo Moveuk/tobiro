@@ -6,6 +6,9 @@ import com.sparta.tobiro.api.accommodation.dto.response.AccommodationResponse
 import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.service.AccommodationService
 import com.sparta.tobiro.domain.accommodation.service.RoomService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -24,6 +27,17 @@ class BackOfficeController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(accommodationService.getMyAccommodation(authentication))
+    }
+
+    @GetMapping("/accommodations/{accommodationId}/rooms")
+    fun getRooms(
+        @PathVariable accommodationId: Long,
+        @PageableDefault(size = 10, sort = ["id"]) pageable: Pageable,
+        authentication: Authentication?,
+    ): ResponseEntity<Page<RoomResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(roomService.getRooms(accommodationId, pageable, authentication))
     }
 
     @PostMapping("/my-accommodation")
