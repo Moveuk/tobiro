@@ -29,5 +29,13 @@ class ReviewController(
         return ResponseEntity.status(HttpStatus.OK)
                 .body(reviewService.updateReview(reviewId, updateReviewRequest))
     }
+    @DeleteMapping("{reviewId}")
+    fun deleteReview(
+            @PathVariable reviewId: Long) : ResponseEntity<Unit>{
+            reviewService.deleteReview(reviewId)
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build()
+    }
 
 }
