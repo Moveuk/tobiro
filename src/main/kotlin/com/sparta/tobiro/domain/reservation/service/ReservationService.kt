@@ -57,6 +57,7 @@ class ReservationService(
         return ReservationResponse.from(reservationRepository.save(request.to(findMember, findRoom)))
     }
 
+    @Transactional
     fun deleteReservation(reservationId: Long) {
         val findReservation =
             reservationRepository.findByIdOrNull(reservationId) ?: throw ModelNotFoundException(
