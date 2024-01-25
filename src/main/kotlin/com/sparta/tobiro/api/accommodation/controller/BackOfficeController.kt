@@ -7,12 +7,15 @@ import com.sparta.tobiro.api.accommodation.dto.response.AccommodationResponse
 import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.service.AccommodationService
 import com.sparta.tobiro.domain.accommodation.service.RoomService
+import com.sparta.tobiro.infra.security.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -21,13 +24,14 @@ class BackOfficeController(
     private val accommodationService: AccommodationService,
     private val roomService: RoomService,
 ) {
+    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
     @GetMapping("/my-accommodation")
     fun getMyAccommodation(
-        authentication: Authentication?
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<AccommodationResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(accommodationService.getMyAccommodation(authentication))
+            .body(accommodationService.getMyAccommodation(userPrincipal))
     }
 
     @PutMapping("/my-accommodation")
