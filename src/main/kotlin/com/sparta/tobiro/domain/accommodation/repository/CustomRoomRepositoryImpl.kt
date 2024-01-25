@@ -130,7 +130,6 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
                 .where(roomWhereClause)
                 .fetchOne() ?: 0L
         } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
             throw IllegalArgumentException(
                 "잘못된 sort 인자 ${
                     pageable.sort.toList().map { it.property }.joinToString(",")
