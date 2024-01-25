@@ -34,14 +34,15 @@ class BackOfficeController(
             .body(accommodationService.getMyAccommodation(userPrincipal))
     }
 
+    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
     @PutMapping("/my-accommodation")
     fun updateMyAccommodation(
         @RequestBody request: UpdateAccommodationRequest,
-        authentication: Authentication?
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<AccommodationResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(accommodationService.updateMyAccommodation(authentication, request))
+            .body(accommodationService.updateMyAccommodation(userPrincipal, request))
     }
 
     @GetMapping("/accommodations/{accommodationId}/rooms")
