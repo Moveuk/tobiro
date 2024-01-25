@@ -37,7 +37,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse(e.bindingResult.allErrors.map { it.defaultMessage }
-                .reduce { acc, string -> "$acc $string" }))
+                .body(ErrorResponse(e.bindingResult.allErrors.map { it.defaultMessage }
+                        .reduce { acc, string -> "$acc $string" }))
     }
 }
