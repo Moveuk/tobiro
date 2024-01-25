@@ -9,16 +9,20 @@ import com.querydsl.core.types.dsl.PathBuilder
 import com.sparta.tobiro.domain.accommodation.model.QAccommodation
 import com.sparta.tobiro.domain.accommodation.model.QRoom
 import com.sparta.tobiro.domain.accommodation.model.Room
+import com.sparta.tobiro.domain.reservation.model.QReservation
 import com.sparta.tobiro.infra.querydsl.QueryDslSupport
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Repository
 class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
     private val room = QRoom.room
     private val accommodation = QAccommodation.accommodation
+    private val reservation = QReservation.reservation
 
     override fun findAllByPageableAndAccommodationId(
         pageable: Pageable,
@@ -57,6 +61,68 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
         }
 
         return PageImpl(contents, pageable, totalCount)
+    }
+
+    override fun searchAccommodations(
+        pageable: Pageable,
+        query: String?,
+        checkinDate: LocalDate,
+        checkoutDate: LocalDate
+    ): Page<Room> {
+        val roomWhereClause = BooleanBuilder()
+
+        query?.let {
+            roomWhereClause
+                .and(accommodation.address.containsIgnoreCase("$query"))
+        }
+
+        roomWhereClause
+            .and(
+                (reservation.checkinDate.notBetween(checkinDate.atTime(15, 0), checkoutDate.atTime(LocalTime.NOON))
+                    .and(
+                        reservation.checkoutDate.notBetween(
+                            checkinDate.atTime(15, 0),
+                            checkoutDate.atTime(LocalTime.NOON)
+                        )
+                    )
+                        )
+                    .or(reservation.id.isNull)
+            )
+
+        val roomContents: MutableList<Room>
+        val totalCount: Long
+        try {
+            roomContents = queryFactory
+                .selectFrom(room)
+                .leftJoin(room.accommodation, accommodation)
+                .fetchJoin()
+                .leftJoin(reservation)
+                .on(reservation.room.id.eq(room.id))
+                .where(roomWhereClause)
+                .offset(pageable.offset)
+                .orderBy(*getOrderSpecifier(pageable, room))
+                .fetch()
+
+            totalCount = queryFactory
+                .select(room.count())
+                .from(room)
+                .leftJoin(room.accommodation, accommodation)
+                .leftJoin(reservation)
+                .on(reservation.room.id.eq(room.id))
+                .where(roomWhereClause)
+                .fetchOne() ?: 0L
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            throw IllegalArgumentException(
+                "잘못된 sort 인자 ${
+                    pageable.sort.toList().map { it.property }.joinToString(",")
+                }를 넣으셨습니다."
+            )
+        } catch (e: Exception) {
+            throw IllegalArgumentException("plz exception check")
+        }
+
+        return PageImpl(roomContents, pageable, totalCount)
     }
 
     private fun getOrderSpecifier(pageable: Pageable, path: EntityPath<*>): Array<OrderSpecifier<*>> {
