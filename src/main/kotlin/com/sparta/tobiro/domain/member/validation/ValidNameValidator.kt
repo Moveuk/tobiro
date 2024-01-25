@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext
 class ValidNameValidator : ConstraintValidator<ValidName, String> {
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
 
-        val isValid = value != null && value.matches(Regex("[a-z0-9]*$")) && value.length in 4..10
+        val isValid = value != null && value.matches(Regex("^(?=.*[a-z])(?=.*\\d)[a-z0-9]*$")) && value.length in 4..10
 
         if (!isValid) {
             context?.disableDefaultConstraintViolation()
