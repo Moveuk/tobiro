@@ -44,8 +44,8 @@ class MemberController(
             .body(memberService.updateMemberProfile(memberId,updateMemberProfileRequest))
     }
 
-    @PreAuthorize("hasAnyRole('MEMBER')")
-    @PutMapping("/update-password")
+    @PreAuthorize("hasRole('MEMBER')")
+    @PutMapping("/my-password")
     fun updatePassword(@Valid @RequestBody request: UpdateMemberPasswordRequest):ResponseEntity<String>{
         val authenticatedId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
         val message = memberService.updatePassword(authenticatedId, request)

@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 @Target(allowedTargets = [AnnotationTarget.FIELD, AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER],
 )
 annotation class ValidBusinessNumber(
-    val message: String = "BusinessNumber는 10자리입니다. 숫자(0~9)로 구성 되어야 합니다.",
+    val message: String = "BusinessNumber는 -포함 12자리입니다 . 숫자(0~9)로 구성 되어야 합니다.",
     val groups: Array<KClass<out Any>> = [],
     val payload: Array<KClass<out Payload>> = []
 )

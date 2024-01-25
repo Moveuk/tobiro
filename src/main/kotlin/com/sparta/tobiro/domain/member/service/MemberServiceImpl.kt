@@ -17,7 +17,6 @@ import com.sparta.tobiro.global.exception.ModelNotFoundException
 import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
-import jakarta.validation.Valid
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -32,7 +31,7 @@ class MemberServiceImpl(
 ) : MemberService {
 
     @Transactional
-    override fun updatePassword(memberId: Long, @Valid request: UpdateMemberPasswordRequest): String {
+    override fun updatePassword(memberId: Long, request: UpdateMemberPasswordRequest): String {
 
         val member = memberRepository.findById(memberId).orElseThrow { ModelNotFoundException("Member", memberId) }
         if (!passwordEncoder.matches(request.memberPassword, member.password)) {

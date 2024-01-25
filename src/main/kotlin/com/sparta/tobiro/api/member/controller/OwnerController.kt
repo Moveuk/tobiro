@@ -47,7 +47,7 @@ class OwnerController(
 
 
     @PreAuthorize("hasAnyRole('OWNER')")
-    @PutMapping("/update-password")
+    @PutMapping("/my-password")
     fun updatePassword(@Valid @RequestBody request: UpdateOwnerPasswordRequest):ResponseEntity<String>{
         val authenticatedId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
         val message = ownerService.updatePassword(authenticatedId, request)

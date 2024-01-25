@@ -12,7 +12,6 @@ import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.domain.member.model.OwnerRecentPasswords
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
-import com.sparta.tobiro.domain.member.repository.MemberRecentPasswordsRepository
 import com.sparta.tobiro.domain.member.repository.OwnerRecentPasswordsRepository
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
@@ -20,7 +19,6 @@ import com.sparta.tobiro.global.exception.ModelNotFoundException
 import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
-import jakarta.validation.Valid
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -32,12 +30,11 @@ class OwnerServiceImpl(
     private val accommodationRepository: AccommodationRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin,
-    private val memberRecentPasswordsRepository: MemberRecentPasswordsRepository,
     private val ownerRecentPasswordsRepository: OwnerRecentPasswordsRepository
 ) : OwnerService {
 
     @Transactional
-    override fun updatePassword(ownerId: Long, @Valid request: UpdateOwnerPasswordRequest): String  {
+    override fun updatePassword(ownerId: Long, request: UpdateOwnerPasswordRequest): String  {
         val owner = ownerRepository.findById(ownerId).orElseThrow { ModelNotFoundException("Owner", ownerId) }
 
         if (!passwordEncoder.matches(request.ownerPassword, owner.password)) {
