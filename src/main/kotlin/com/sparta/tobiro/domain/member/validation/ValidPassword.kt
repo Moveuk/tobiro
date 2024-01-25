@@ -3,13 +3,11 @@ package com.sparta.tobiro.domain.member.validation
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import jakarta.validation.ReportAsSingleViolation
-import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import kotlin.reflect.KClass
 
 @Constraint(validatedBy = [ValidPasswordValidator::class])
 @Size(min = 8, max = 15)
-@Pattern(regexp = "^[a-z0-9_!@#$%^&*()/*-+?|]*$")
 @ReportAsSingleViolation
 @Retention(AnnotationRetention.RUNTIME)
 @Target(allowedTargets = [AnnotationTarget.FIELD, AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER])
