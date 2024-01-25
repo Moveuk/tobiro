@@ -1,6 +1,7 @@
 package com.sparta.tobiro.domain.member.dto.request
 
 import com.sparta.tobiro.domain.accommodation.model.Category
+import com.sparta.tobiro.domain.member.validation.ValidBusinessNumber
 import com.sparta.tobiro.domain.member.validation.ValidName
 import com.sparta.tobiro.domain.member.validation.ValidPassword
 
@@ -22,6 +23,7 @@ data class OwnerSignUpRequest(
 
     var address: String,
 
+    @field:ValidBusinessNumber
     var businessNumber: String,
 
     var category : Category,

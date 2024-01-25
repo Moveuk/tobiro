@@ -4,12 +4,15 @@ import com.sparta.tobiro.domain.accommodation.model.Accommodation
 import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.member.dto.request.LoginRequest
 import com.sparta.tobiro.domain.member.dto.request.OwnerSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerPasswordRequest
 import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerProfileRequest
 import com.sparta.tobiro.domain.member.dto.response.LoginResponse
 import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.domain.member.model.Owner
+import com.sparta.tobiro.domain.member.model.OwnerRecentPasswords
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
+import com.sparta.tobiro.domain.member.repository.OwnerRecentPasswordsRepository
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
@@ -27,7 +30,31 @@ class OwnerServiceImpl(
     private val accommodationRepository: AccommodationRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin,
+    private val ownerRecentPasswordsRepository: OwnerRecentPasswordsRepository
 ) : OwnerService {
+
+    @Transactional
+    override fun updatePassword(ownerId: Long, request: UpdateOwnerPasswordRequest): String  {
+        val owner = ownerRepository.findById(ownerId).orElseThrow { ModelNotFoundException("Owner", ownerId) }
+
+        if (!passwordEncoder.matches(request.ownerPassword, owner.password)) {
+            throw InvalidCredentialException("기존 비밀번호가 일치하지 않습니다.")
+        }
+
+        val newPassword = request.ownerNewPassword
+        val newPasswordHash = passwordEncoder.encode(newPassword)
+
+        val recentPasswords = ownerRecentPasswordsRepository.findTop3ByOwnerOrderByIdDesc(owner)
+        if (recentPasswords.any { passwordEncoder.matches(newPassword, it.password) }) {
+            throw IllegalArgumentException("최근 3번 사용한 비밀번호는 사용할 수 없습니다.")
+        }
+        val recentPassword = OwnerRecentPasswords(newPasswordHash, owner)
+        ownerRecentPasswordsRepository.save(recentPassword)
+
+        owner.password = newPasswordHash
+        ownerRepository.save(owner)
+        return "비밀번호 변경이 완료되었습니다"
+    }
     override fun login(request: LoginRequest): LoginResponse {
         val owner = ownerRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Owner")
         if (owner.role.name != request.role) {

@@ -3,14 +3,17 @@ package com.sparta.tobiro.api.member.controller
 
 import com.sparta.tobiro.domain.member.dto.request.LoginRequest
 import com.sparta.tobiro.domain.member.dto.request.OwnerSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerPasswordRequest
 import com.sparta.tobiro.domain.member.dto.request.UpdateOwnerProfileRequest
 import com.sparta.tobiro.domain.member.dto.response.LoginResponse
 import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.domain.member.service.OwnerService
+import com.sparta.tobiro.infra.security.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 
@@ -41,5 +44,15 @@ class OwnerController(
             .status(HttpStatus.OK)
             .body(ownerService.updateOwnerProfile(ownerId,updateOwnerProfileRequest))
     }
-}
 
+
+    @PreAuthorize("hasAnyRole('OWNER')")
+    @PutMapping("/my-password")
+    fun updatePassword(@Valid @RequestBody request: UpdateOwnerPasswordRequest):ResponseEntity<String>{
+        val authenticatedId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
+        val message = ownerService.updatePassword(authenticatedId, request)
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(message)
+    }
+}
