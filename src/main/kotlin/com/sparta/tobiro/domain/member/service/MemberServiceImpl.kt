@@ -2,18 +2,22 @@ package com.sparta.tobiro.domain.member.service
 
 import com.sparta.tobiro.domain.member.dto.request.LoginRequest
 import com.sparta.tobiro.domain.member.dto.request.MemberSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateMemberPasswordRequest
 import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
 import com.sparta.tobiro.domain.member.dto.response.LoginResponse
 import com.sparta.tobiro.domain.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.model.Member
+import com.sparta.tobiro.domain.member.model.MemberRecentPasswords
 import com.sparta.tobiro.domain.member.model.Role
 import com.sparta.tobiro.domain.member.model.toResponse
+import com.sparta.tobiro.domain.member.repository.MemberRecentPasswordsRepository
 import com.sparta.tobiro.domain.member.repository.MemberRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
 import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
+import jakarta.validation.Valid
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -23,8 +27,33 @@ import org.springframework.stereotype.Service
 class MemberServiceImpl(
     private val memberRepository: MemberRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val memberRecentPasswordsRepository: MemberRecentPasswordsRepository,
     private val jwtPlugin: JwtPlugin
 ) : MemberService {
+
+    @Transactional
+    override fun updatePassword(memberId: Long, @Valid request: UpdateMemberPasswordRequest): String {
+
+        val member = memberRepository.findById(memberId).orElseThrow { ModelNotFoundException("Member", memberId) }
+        if (!passwordEncoder.matches(request.memberPassword, member.password)) {
+            throw InvalidCredentialException("기존 비밀번호가 일치하지 않습니다.")
+        }
+
+        val newPassword = request.memberNewPassword
+        val newPasswordHash = passwordEncoder.encode(newPassword)
+
+        val recentPasswords = memberRecentPasswordsRepository.findTop3ByMemberOrderByIdDesc(member)
+        if (recentPasswords.any { passwordEncoder.matches(newPassword, it.password) }) {
+            throw IllegalArgumentException("최근 3번 사용한 비밀번호는 사용할 수 없습니다.")
+        }
+
+        val recentPassword = MemberRecentPasswords(newPasswordHash, member)
+        memberRecentPasswordsRepository.save(recentPassword)
+
+        member.password = newPasswordHash
+        memberRepository.save(member)
+        return "비밀번호 변경이 완료되었습니다"
+    }
 
     override fun login(request: LoginRequest): LoginResponse {
         val member = memberRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Member")

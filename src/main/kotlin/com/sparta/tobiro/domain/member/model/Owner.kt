@@ -28,15 +28,15 @@ class Owner(
 
     @Column(name = "businessNumber")
     var businessNumber: String,
-
-
-
     //   @Column(name = "profile_pic_url", nullable = false)
     //   var profilePicUrl : String ,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    var role: Role = Role.OWNER
+    var role: Role = Role.OWNER,
+
+    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var ownerRecentPasswords: MutableList<OwnerRecentPasswords> = mutableListOf()
 
 ) : BaseTimeEntity() {
     @Id
