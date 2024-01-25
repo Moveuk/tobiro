@@ -1,6 +1,6 @@
 package com.sparta.tobiro.domain.member.model
 
-import com.sparta.tobiro.domain.member.dto.MemberResponse
+import com.sparta.tobiro.domain.member.dto.response.MemberResponse
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -23,14 +23,15 @@ class Member(
 
     @Column(name = "tlno")
     var tlno: String,
-
     //  @Column(name = "profile_pic_url", nullable = false)
     // var profilePicUrl: MultiPartFile ,
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    var role: Role = Role.MEMBER
+    var role: Role = Role.MEMBER,
+
+    @OneToMany(mappedBy = "member", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var memberRecentPasswords: MutableList<MemberRecentPasswords> = mutableListOf()
 
 ) : BaseTimeEntity() {
 

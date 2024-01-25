@@ -1,6 +1,6 @@
 package com.sparta.tobiro.domain.member.model
 
-import com.sparta.tobiro.domain.member.dto.OwnerResponse
+import com.sparta.tobiro.domain.member.dto.response.OwnerResponse
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -28,13 +28,15 @@ class Owner(
 
     @Column(name = "businessNumber")
     var businessNumber: String,
-
     //   @Column(name = "profile_pic_url", nullable = false)
     //   var profilePicUrl : String ,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    var role: Role = Role.OWNER
+    var role: Role = Role.OWNER,
+
+    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var ownerRecentPasswords: MutableList<OwnerRecentPasswords> = mutableListOf()
 
 ) : BaseTimeEntity() {
     @Id

@@ -1,4 +1,4 @@
-package com.sparta.tobiro.domain.member.dto
+package com.sparta.tobiro.domain.member.dto.response
 
 data class OwnerResponse(
 

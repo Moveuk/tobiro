@@ -19,16 +19,15 @@ class Reservation(
     var occupancy: Int,
 
     @Column(name = "full_charge", nullable = false)
-    var fullCharge: Long,
+    var fullCharge: Int,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     var member: Member,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_info_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false)
     var room: Room,
-
     ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

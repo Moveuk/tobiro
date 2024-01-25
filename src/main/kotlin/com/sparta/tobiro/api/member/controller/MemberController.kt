@@ -1,38 +1,56 @@
 package com.sparta.tobiro.api.member.controller
 
-import com.sparta.tobiro.domain.member.dto.MemberResponse
-import com.sparta.tobiro.domain.member.dto.MemberSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.LoginRequest
+import com.sparta.tobiro.domain.member.dto.request.MemberSignUpRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateMemberPasswordRequest
+import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
+import com.sparta.tobiro.domain.member.dto.response.LoginResponse
+import com.sparta.tobiro.domain.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.service.MemberService
+import com.sparta.tobiro.infra.security.UserPrincipal
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
+@RequestMapping("/api/v1/members")
 class MemberController(
-    private val memberService: MemberService
+    private val memberService: MemberService,
 ) {
-    @PostMapping("/api/v1/member/signup")
-    fun signUp(@RequestBody signUpRequest: MemberSignUpRequest): ResponseEntity<MemberResponse> {
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberService.login(loginRequest))
+    }
+    @PostMapping("/signup")
+    fun signUp(@Valid @RequestBody signUpRequest: MemberSignUpRequest): ResponseEntity<MemberResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(memberService.signUp(signUpRequest))
     }
-}
-
-
-/*
-fun signUp(@RequestBody signUpRequest: SignUpRequest): ResponseEntity<MemberResponse> {
-    val signupResponse = when (signUpRequest.role) {
-        "MEMBER" -> memberService.signUp(signUpRequest)
-        "OWNER" -> ownerService.signUp(signUpRequest)
-        else -> throw IllegalArgumentException("정상적인 Role 아닙니다")
+    @PreAuthorize("hasRole('MEMBER')")
+    @PutMapping("/{memberId}/profile")
+    fun updateOwnerProfile(
+        @PathVariable memberId:Long,
+        @RequestBody updateMemberProfileRequest: UpdateMemberProfileRequest
+    ): ResponseEntity<MemberResponse>{
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberService.updateMemberProfile(memberId,updateMemberProfileRequest))
     }
-    return ResponseEntity
-        .status(HttpStatus.OK)
-        .body(signupResponse)
+
+    @PreAuthorize("hasRole('MEMBER')")
+    @PutMapping("/my-password")
+    fun updatePassword(@Valid @RequestBody request: UpdateMemberPasswordRequest):ResponseEntity<String>{
+        val authenticatedId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
+        val message = memberService.updatePassword(authenticatedId, request)
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(message)
+    }
 }
-}
-*/
