@@ -6,6 +6,7 @@ import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
 import com.sparta.tobiro.domain.member.dto.response.LoginResponse
 import com.sparta.tobiro.domain.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.service.MemberService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -24,7 +25,7 @@ class MemberController(
             .body(memberService.login(loginRequest))
     }
     @PostMapping("/signup")
-    fun signUp(@RequestBody signUpRequest: MemberSignUpRequest): ResponseEntity<MemberResponse> {
+    fun signUp(@Valid @RequestBody signUpRequest: MemberSignUpRequest): ResponseEntity<MemberResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(memberService.signUp(signUpRequest))
