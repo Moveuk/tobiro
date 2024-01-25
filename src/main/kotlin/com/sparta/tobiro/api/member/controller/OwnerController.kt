@@ -38,6 +38,7 @@ class OwnerController(
     @PutMapping("/{ownerId}/profile")
     fun updateOwnerProfile(
         @PathVariable ownerId:Long,
+        @Valid
         @RequestBody updateOwnerProfileRequest: UpdateOwnerProfileRequest
     ): ResponseEntity<OwnerResponse>{
         return ResponseEntity
@@ -46,7 +47,7 @@ class OwnerController(
     }
 
 
-    @PreAuthorize("hasAnyRole('OWNER')")
+    @PreAuthorize("hasRole('OWNER')")
     @PutMapping("/my-password")
     fun updatePassword(@Valid @RequestBody request: UpdateOwnerPasswordRequest):ResponseEntity<String>{
         val authenticatedId = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id

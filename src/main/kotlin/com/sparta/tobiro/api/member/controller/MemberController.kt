@@ -35,8 +35,9 @@ class MemberController(
     }
     @PreAuthorize("hasRole('MEMBER')")
     @PutMapping("/{memberId}/profile")
-    fun updateOwnerProfile(
+    fun updateMemberProfile(
         @PathVariable memberId:Long,
+        @Valid
         @RequestBody updateMemberProfileRequest: UpdateMemberProfileRequest
     ): ResponseEntity<MemberResponse>{
         return ResponseEntity
