@@ -6,6 +6,7 @@ import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.jpa.JPAExpressions
 import com.sparta.tobiro.domain.accommodation.model.QAccommodation
 import com.sparta.tobiro.domain.accommodation.model.QRoom
 import com.sparta.tobiro.domain.accommodation.model.Room
@@ -78,10 +79,13 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
 
         roomWhereClause
             .and(
-                (reservation.checkinDate.notBetween(checkinDate.atTime(15, 0), checkoutDate.atTime(LocalTime.NOON))
+                (reservation.checkinDate.notBetween(
+                    checkinDate.atTime(LocalTime.MIN),
+                    checkoutDate.atTime(LocalTime.NOON)
+                )
                     .and(
                         reservation.checkoutDate.notBetween(
-                            checkinDate.atTime(15, 0),
+                            checkinDate.atTime(LocalTime.MIN),
                             checkoutDate.atTime(LocalTime.NOON)
                         )
                     )
@@ -94,11 +98,25 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
         try {
             roomContents = queryFactory
                 .selectFrom(room)
-                .leftJoin(room.accommodation, accommodation)
-                .fetchJoin()
-                .leftJoin(reservation)
-                .on(reservation.room.id.eq(room.id))
-                .where(roomWhereClause)
+                .where(
+                    room.id.notIn(
+                        JPAExpressions.select(room.id)
+                            .from(room)
+                            .leftJoin(reservation).on(room.id.eq(reservation.room.id))
+                            .where(
+                                reservation.checkinDate.between(
+                                    checkinDate.atTime(LocalTime.MIN),
+                                    checkoutDate.atTime(LocalTime.NOON)
+                                )
+                                    .and(
+                                        reservation.checkoutDate.between(
+                                            checkinDate.atTime(LocalTime.MIN),
+                                            checkoutDate.atTime(LocalTime.NOON)
+                                        )
+                                    )
+                            )
+                    )
+                )
                 .offset(pageable.offset)
                 .orderBy(*getOrderSpecifier(pageable, room))
                 .fetch()

@@ -6,7 +6,6 @@ import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.PathBuilder
-import com.sparta.tobiro.domain.accommodation.model.QAccommodation
 import com.sparta.tobiro.domain.accommodation.model.QRoom
 import com.sparta.tobiro.domain.member.model.QMember
 import com.sparta.tobiro.domain.reservation.model.QReservation
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Repository
 @Repository
 class CustomReservationRepositoryImpl : CustomReservationRepository, QueryDslSupport() {
     private val reservation = QReservation.reservation
-    private val accommodation = QAccommodation.accommodation
     private val room = QRoom.room
     private val member = QMember.member
 
