@@ -24,7 +24,7 @@ class BackOfficeController(
     private val accommodationService: AccommodationService,
     private val roomService: RoomService,
 ) {
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('OWNER')")
     @GetMapping("/my-accommodation")
     fun getMyAccommodation(
         @AuthenticationPrincipal userPrincipal: UserPrincipal
@@ -34,7 +34,7 @@ class BackOfficeController(
             .body(accommodationService.getMyAccommodation(userPrincipal))
     }
 
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('OWNER')")
     @PutMapping("/my-accommodation")
     fun updateMyAccommodation(
         @RequestBody request: UpdateAccommodationRequest,
@@ -45,15 +45,16 @@ class BackOfficeController(
             .body(accommodationService.updateMyAccommodation(userPrincipal, request))
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @GetMapping("/accommodations/{accommodationId}/rooms")
     fun getRooms(
         @PathVariable accommodationId: Long,
         @PageableDefault(size = 10, sort = ["id"]) pageable: Pageable,
-        authentication: Authentication?,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Page<RoomResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(roomService.getRooms(accommodationId, pageable, authentication))
+            .body(roomService.getRooms(accommodationId, pageable, userPrincipal))
     }
 
     @GetMapping("/accommodations/{accommodationId}/rooms/{roomId}")
