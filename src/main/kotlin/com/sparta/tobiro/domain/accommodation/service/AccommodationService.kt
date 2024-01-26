@@ -6,11 +6,11 @@ import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.infra.security.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -20,20 +20,16 @@ class AccommodationService(
     private val accommodationRepository: AccommodationRepository,
     private val ownerRepository: OwnerRepository
 ) {
-    fun getMyAccommodation(principal: Authentication?): AccommodationResponse{
-        // TODO: 인증/인가 완료되면 principal에서 정보 꺼내와서 확인
-        val principalId = 1L
-        val findAccommodation = ownerRepository.findByIdOrNull(principalId).let {
+    fun getMyAccommodation(principal: UserPrincipal): AccommodationResponse{
+        val findAccommodation = ownerRepository.findByIdOrNull(principal.id).let {
             accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
         return AccommodationResponse.from(findAccommodation)
     }
 
     @Transactional
-    fun updateMyAccommodation(principal: Authentication?, request: UpdateAccommodationRequest): AccommodationResponse{
-        // TODO: 인증/인가 완료되면 principal에서 정보 꺼내와서 확인
-        val principalId = 1L
-        val findAccommodation = ownerRepository.findByIdOrNull(principalId).let {
+    fun updateMyAccommodation(principal: UserPrincipal, request: UpdateAccommodationRequest): AccommodationResponse{
+        val findAccommodation = ownerRepository.findByIdOrNull(principal.id).let {
             accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
         findAccommodation.update(request)
