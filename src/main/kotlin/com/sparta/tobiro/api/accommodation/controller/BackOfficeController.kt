@@ -80,15 +80,16 @@ class BackOfficeController(
             .body(roomService.createRoom(accommodationId, request, userPrincipal))
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @PutMapping("/accommodations/{accommodationId}/rooms/{roomId}")
     fun updateRoom(
         @PathVariable roomId: Long,
         @RequestBody request: UpdateRoomRequest,
-        authentication: Authentication?,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<RoomResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(roomService.updateRoom(roomId, request))
+            .body(roomService.updateRoom(roomId, request, userPrincipal))
     }
 
     @DeleteMapping("/accommodations/{accommodationId}/rooms/{roomId}")

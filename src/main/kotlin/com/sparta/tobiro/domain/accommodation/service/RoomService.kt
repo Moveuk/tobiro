@@ -54,16 +54,10 @@ class RoomService(
     }
 
     @Transactional
-    fun updateRoom(roomId: Long, request: UpdateRoomRequest): RoomResponse {
-        //TODO: ADMIN의 경우 생각해서 인증 인가 기능 추가 후 authenication에서 꺼내 사용함.
-        val userPrincipalId = 1L
-
+    fun updateRoom(roomId: Long, request: UpdateRoomRequest, userPrincipal: UserPrincipal): RoomResponse {
         val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
-
-        if (findRoom.accommodation.owner.id != userPrincipalId) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
-
+        if (findRoom.accommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
         findRoom.update(request)
-
         return RoomResponse.from(findRoom)
     }
 
