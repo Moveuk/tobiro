@@ -23,7 +23,7 @@ class AccommodationService(
     private val roomRepository: RoomRepository,
     private val ownerRepository: OwnerRepository
 ) {
-    fun getMyAccommodation(principal: UserPrincipal): AccommodationResponse{
+    fun getMyAccommodation(principal: UserPrincipal): AccommodationDetailResponse{
         val findAccommodation = ownerRepository.findByIdOrNull(principal.id).let {
             accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
@@ -31,7 +31,7 @@ class AccommodationService(
     }
 
     @Transactional
-    fun updateMyAccommodation(principal: UserPrincipal, request: UpdateAccommodationRequest): AccommodationResponse{
+    fun updateMyAccommodation(principal: UserPrincipal, request: UpdateAccommodationRequest): AccommodationDetailResponse{
         val findAccommodation = ownerRepository.findByIdOrNull(principal.id).let {
             accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
