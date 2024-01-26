@@ -1,6 +1,5 @@
 package com.sparta.tobiro.domain.member.dto.request
 
-import com.sparta.tobiro.domain.member.validation.ValidName
 import com.sparta.tobiro.domain.member.validation.ValidPassword
 import com.sparta.tobiro.domain.member.validation.ValidTlno
 import jakarta.validation.constraints.Email
@@ -9,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @Validated
 data class MemberSignUpRequest(
-    @field: ValidName
+
     var name: String,
 
     @field:Email

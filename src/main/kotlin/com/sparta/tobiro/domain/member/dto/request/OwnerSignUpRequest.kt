@@ -2,7 +2,6 @@ package com.sparta.tobiro.domain.member.dto.request
 
 import com.sparta.tobiro.domain.accommodation.model.Category
 import com.sparta.tobiro.domain.member.validation.ValidBusinessNumber
-import com.sparta.tobiro.domain.member.validation.ValidName
 import com.sparta.tobiro.domain.member.validation.ValidPassword
 import com.sparta.tobiro.domain.member.validation.ValidTlno
 import jakarta.validation.constraints.Email
@@ -11,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @Validated
 data class OwnerSignUpRequest(
-    @field: ValidName
+
     var name: String,
 
     @field: Email
@@ -31,6 +30,12 @@ data class OwnerSignUpRequest(
 
     @field:ValidBusinessNumber
     var businessNumber: String,
+
+    var accommdationname: String,
+
+    var accommdationaddress: String,
+
+    var accommdationtlno:String,
 
     var category: Category,
 
