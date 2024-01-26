@@ -101,7 +101,6 @@ class MemberServiceImpl(
         }
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
         member.name = request.name
-        member.email = request.email
         member.introduction = request.introduction
         member.tlno = request.tlno
         return memberRepository.save(member).toResponse()
