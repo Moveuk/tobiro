@@ -28,8 +28,9 @@ class Owner(
 
     @Column(name = "businessNumber")
     var businessNumber: String,
-    //   @Column(name = "profile_pic_url", nullable = false)
-    //   var profilePicUrl : String ,
+
+    @Column(name = "profile_pic_url", nullable = false)
+    var profilePicUrl: String = "https://imgur.com/S8jQ6wN",
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)

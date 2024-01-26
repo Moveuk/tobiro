@@ -67,7 +67,9 @@ class MemberServiceImpl(
                 subject = member.id.toString(),
                 email = member.email,
                 role = member.role.name
-            )
+            ),
+            name = member.name,
+            profilePicUrl = member.profilePicUrl
         )
     }
 

@@ -7,10 +7,10 @@ import com.sparta.tobiro.domain.member.validation.ValidPassword
 import com.sparta.tobiro.domain.member.validation.ValidTlno
 import jakarta.validation.constraints.Email
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.multipart.MultipartFile
 
 @Validated
 data class OwnerSignUpRequest(
-
     @field: ValidName
     var name: String,
 
@@ -32,8 +32,9 @@ data class OwnerSignUpRequest(
     @field:ValidBusinessNumber
     var businessNumber: String,
 
-    var category : Category,
+    var category: Category,
 
-    var description:String,
-    // var profilePic: MultiPartFile
+    var description: String,
+
+    var accommodationPic: MultipartFile?
 )
