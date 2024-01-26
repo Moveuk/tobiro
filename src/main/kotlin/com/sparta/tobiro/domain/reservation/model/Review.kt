@@ -26,6 +26,7 @@ class Review(
 
 fun Review.toResponse(): ReviewResponse {
     return ReviewResponse(
+            reviewId = id!!,
             memberName = reservation.member.name,
             content = content,
             rating = rating
