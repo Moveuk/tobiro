@@ -8,11 +8,11 @@ import jakarta.persistence.*
 @Table(name = "owner")
 class Owner(
 
-    @Column(name = "email", nullable = false)
-    var email: String,
-
     @Column(name = "name", nullable = false)
     var name: String,
+
+    @Column(name = "email", nullable = false)
+    var email: String,
 
     @Column(name = "password", nullable = false)
     var password: String,

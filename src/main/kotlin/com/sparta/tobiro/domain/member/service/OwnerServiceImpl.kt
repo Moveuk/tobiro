@@ -83,11 +83,11 @@ class OwnerServiceImpl(
             throw IllegalStateException("사업자번호가 이미 존재 합니다.")
         }
         val owner = Owner(
-            password = passwordEncoder.encode(request.password),
+            name = request.name,
             email = request.email,
+            password = passwordEncoder.encode(request.password),
             introduction = request.introduction,
             tlno = request.tlno,
-            name = request.name,
             address = request.address,
             businessNumber = request.businessNumber,
             role = when (request.role) {
@@ -100,9 +100,9 @@ class OwnerServiceImpl(
                 owner = owner,
                 category = request.category,
                 accommodationPicUrls = "https://imgur.com/a/tBAKHUn",
-                address = request.address,
-                tlno = request.tlno,
-                name = request.name,
+                address = request.accommdationaddress,
+                tlno = request.accommdationtlno,
+                name = request.accommdationname,
                 description = request.description
             )
         )
