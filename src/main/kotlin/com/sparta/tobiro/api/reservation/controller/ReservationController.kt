@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 class ReservationController(
     private val reservationService: ReservationService
 ) {
-
+    @PreAuthorize("hasRole('MEMBER')")
     @PostMapping
     fun createReservation(
         @RequestBody createReservationRequest: CreateReservationRequest
@@ -34,6 +34,7 @@ class ReservationController(
         return ResponseEntity.status(HttpStatus.OK).body(reservationService.getReservations(pageable))
     }
 
+    @PreAuthorize("hasRole('MEMBER')")
     @DeleteMapping("/{reservationId}")
     fun deleteReservation(@PathVariable reservationId: Long): ResponseEntity<Unit> {
         reservationService.deleteReservation(reservationId)

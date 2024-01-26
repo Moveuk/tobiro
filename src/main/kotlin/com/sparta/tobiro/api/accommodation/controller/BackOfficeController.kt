@@ -3,7 +3,7 @@ package com.sparta.tobiro.api.accommodation.controller
 import com.sparta.tobiro.api.accommodation.dto.request.CreateRoomRequest
 import com.sparta.tobiro.api.accommodation.dto.request.UpdateAccommodationRequest
 import com.sparta.tobiro.api.accommodation.dto.request.UpdateRoomRequest
-import com.sparta.tobiro.api.accommodation.dto.response.AccommodationResponse
+import com.sparta.tobiro.api.accommodation.dto.response.AccommodationDetailResponse
 import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.service.AccommodationService
 import com.sparta.tobiro.domain.accommodation.service.RoomService

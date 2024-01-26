@@ -32,6 +32,7 @@ class SecurityConfig(
                     "/api/v1/back-office/owners/signup",
                     "/api/v1/back-office/owners/login",
                     "/api/v1/search/accommodations",
+                    "/api/v1/accommodations/{accommodationId}",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                 )

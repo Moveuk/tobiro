@@ -2,9 +2,8 @@ package com.sparta.tobiro.api.accommodation.dto.response
 
 import com.sparta.tobiro.domain.accommodation.model.Room
 
-data class RoomResponse(
+data class RoomDetailResponse(
     val id: Long,
-    val accommodation: AccommodationDetailResponse,
     val roomPicUrls: String,
     val name: String,
     val price: Int,
@@ -12,10 +11,9 @@ data class RoomResponse(
     val maxOccupancy: Int
 ) {
     companion object {
-        fun from(room: Room): RoomResponse {
-            return RoomResponse(
+        fun from(room: Room): RoomDetailResponse {
+            return RoomDetailResponse(
                 id = room.id!!,
-                accommodation = AccommodationDetailResponse.from(room.accommodation),
                 roomPicUrls = room.roomPicUrls,
                 name = room.name,
                 price = room.price,
