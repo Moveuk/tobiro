@@ -46,7 +46,6 @@ class OwnerController(
             .body(ownerService.updateOwnerProfile(ownerId,updateOwnerProfileRequest))
     }
 
-
     @PreAuthorize("hasRole('OWNER')")
     @PutMapping("/my-password")
     fun updatePassword(@Valid @RequestBody request: UpdateOwnerPasswordRequest):ResponseEntity<String>{
