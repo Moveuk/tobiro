@@ -23,7 +23,7 @@ class OwnerController(
     private val ownerService: OwnerService
 ) {
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: LoginRequest) : ResponseEntity<LoginResponse> {
+    fun login(@Valid @RequestBody loginRequest: LoginRequest) : ResponseEntity<LoginResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(ownerService.login(loginRequest))
