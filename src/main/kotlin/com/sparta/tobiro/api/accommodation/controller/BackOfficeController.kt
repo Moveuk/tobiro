@@ -68,15 +68,16 @@ class BackOfficeController(
             .body(roomService.getRoom(roomId, userPrincipal))
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @PostMapping("/accommodations/{accommodationId}/rooms")
     fun createRoom(
         @PathVariable accommodationId: Long,
         @RequestBody request: CreateRoomRequest,
-        authentication: Authentication?,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<RoomResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(roomService.createRoom(accommodationId, request))
+            .body(roomService.createRoom(accommodationId, request, userPrincipal))
     }
 
     @PutMapping("/accommodations/{accommodationId}/rooms/{roomId}")

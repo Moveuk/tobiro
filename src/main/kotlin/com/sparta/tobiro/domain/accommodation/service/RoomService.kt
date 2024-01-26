@@ -42,11 +42,11 @@ class RoomService(
     }
 
     @Transactional
-    fun createRoom(accommodationId: Long, request: CreateRoomRequest): RoomResponse {
+    fun createRoom(accommodationId: Long, request: CreateRoomRequest, userPrincipal: UserPrincipal): RoomResponse {
         val findAccommodation =
             accommodationRepository
                 .findByIdOrNull(accommodationId) ?: throw ModelNotFoundException("Accommodation")
-
+        if (findAccommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소에 대한 권한이 없습니다.")
         return roomRepository.save(request.to(findAccommodation)).let {
             RoomResponse.from(it)
         }
