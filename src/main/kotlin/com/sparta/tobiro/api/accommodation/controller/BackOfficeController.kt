@@ -57,13 +57,15 @@ class BackOfficeController(
             .body(roomService.getRooms(accommodationId, pageable, userPrincipal))
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @GetMapping("/accommodations/{accommodationId}/rooms/{roomId}")
     fun getRoom(
         @PathVariable roomId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<RoomResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(roomService.getRoom(roomId))
+            .body(roomService.getRoom(roomId, userPrincipal))
     }
 
     @PostMapping("/accommodations/{accommodationId}/rooms")
