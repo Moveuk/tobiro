@@ -3,14 +3,14 @@ package com.sparta.tobiro.domain.member.validation
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 
-class ValidNameValidator : ConstraintValidator<ValidName, String> {
+class ValidTlnoValidator : ConstraintValidator<ValidTlno, String> {
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
 
-        val isValid = value != null && value.matches(Regex("^(?=.*[a-z])(?=.*\\d)[a-z0-9]*$")) && value.length in 4..10
+        val isValid = value != null && value.matches(Regex("^[0-9-]*$")) && value.length in 13..13
 
         if (!isValid) {
             context?.disableDefaultConstraintViolation()
-            context?.buildConstraintViolationWithTemplate("Name은 최소 4자 이상, 10자 이하이며 알파벳 소문자(a~z), 숫자(0~9)로 구성 되어야 합니다.")
+            context?.buildConstraintViolationWithTemplate("핸드폰번호는 -포함 13자리입니다 . 숫자(0~9)로 구성 되어야 합니다.")
                 ?.addConstraintViolation()
         }
         return isValid
