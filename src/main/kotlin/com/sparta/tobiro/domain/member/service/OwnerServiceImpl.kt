@@ -68,7 +68,9 @@ class OwnerServiceImpl(
                 subject = owner.id.toString(),
                 email = owner.email,
                 role = owner.role.name
-            )
+            ),
+            name = owner.name,
+            profilePicUrl = owner.profilePicUrl
         )
     }
 
@@ -81,18 +83,18 @@ class OwnerServiceImpl(
             throw IllegalStateException("사업자번호가 이미 존재 합니다.")
         }
         val owner = Owner(
-                password = passwordEncoder.encode(request.password),
-                email = request.email,
-                introduction = request.introduction,
-                tlno = request.tlno,
-                name = request.name,
-                address = request.address,
-                businessNumber = request.businessNumber,
-                role = when(request.role){
-                    Role.OWNER.name -> Role.OWNER
-                    else -> throw IllegalArgumentException("잘못된 role을 입력하셨습니다.")
-                }
-            )
+            password = passwordEncoder.encode(request.password),
+            email = request.email,
+            introduction = request.introduction,
+            tlno = request.tlno,
+            name = request.name,
+            address = request.address,
+            businessNumber = request.businessNumber,
+            role = when (request.role) {
+                Role.OWNER.name -> Role.OWNER
+                else -> throw IllegalArgumentException("잘못된 role을 입력하셨습니다.")
+            }
+        )
         val accommodation = accommodationRepository.save(
             Accommodation(
                 owner = owner,
@@ -108,8 +110,8 @@ class OwnerServiceImpl(
     }
 
     override fun updateOwnerProfile(ownerId: Long, request: UpdateOwnerProfileRequest): OwnerResponse {
-        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
-        if(ownerId != authenticatedId) {
+        val authenticatedId: Long = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
+        if (ownerId != authenticatedId) {
             throw IllegalArgumentException("프로필 수정 권한이 없습니다")
         }
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)

@@ -15,8 +15,6 @@ class OwnerRecentPasswords (
     @JoinColumn(name = "owner_id", nullable = false)
     var owner: Owner,
 
-
-
     ) : BaseTimeEntity() {
 
     @Id
