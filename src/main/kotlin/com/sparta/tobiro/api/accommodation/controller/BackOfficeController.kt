@@ -27,7 +27,7 @@ class BackOfficeController(
     @GetMapping("/my-accommodation")
     fun getMyAccommodation(
         @AuthenticationPrincipal userPrincipal: UserPrincipal
-    ): ResponseEntity<AccommodationResponse> {
+    ): ResponseEntity<AccommodationDetailResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(accommodationService.getMyAccommodation(userPrincipal))
@@ -38,7 +38,7 @@ class BackOfficeController(
     fun updateMyAccommodation(
         @RequestBody request: UpdateAccommodationRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
-    ): ResponseEntity<AccommodationResponse> {
+    ): ResponseEntity<AccommodationDetailResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(accommodationService.updateMyAccommodation(userPrincipal, request))
