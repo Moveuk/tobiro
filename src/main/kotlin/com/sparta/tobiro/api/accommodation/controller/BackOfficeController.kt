@@ -14,7 +14,6 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -92,13 +91,14 @@ class BackOfficeController(
             .body(roomService.updateRoom(roomId, request, userPrincipal))
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @DeleteMapping("/accommodations/{accommodationId}/rooms/{roomId}")
     fun deleteRoom(
         @PathVariable roomId: Long,
-        authentication: Authentication?,
-    ): ResponseEntity<String> {
-        return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .body(roomService.deleteRoom(roomId))
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<Unit> {
+        return roomService.deleteRoom(roomId, userPrincipal).let {
+            ResponseEntity.noContent().build()
+        }
     }
 }
