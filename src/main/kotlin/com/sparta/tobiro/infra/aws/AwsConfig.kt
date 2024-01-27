@@ -8,23 +8,13 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.PropertySource
 
-@PropertySource("classpath:aws.yml")
 @Configuration
-class AwsConfig {
-
-
-
-    @Value("\${accessKey}")
-    private val accessKey: String? = null
-
-    @Value("\${secretKey}")
-    private val secretKey: String? = null
-
-    @Value("\${region}")
-    private val region: String? = null
-
+class AwsConfig(
+    @Value("\${aws.auth.accessKey}") private val accessKey: String,
+    @Value("\${aws.auth.secretKey}") private val secretKey: String,
+    @Value("\${aws.auth.region}") private val region: String,
+) {
     @Bean
     fun amazonS3Client(): AmazonS3Client {
         val awsCredentials: AWSCredentials = BasicAWSCredentials(accessKey, secretKey)
