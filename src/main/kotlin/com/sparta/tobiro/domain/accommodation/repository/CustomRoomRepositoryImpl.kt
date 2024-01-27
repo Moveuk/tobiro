@@ -79,18 +79,23 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
 
         roomWhereClause
             .and(
-                (reservation.checkinDate.notBetween(
-                    checkinDate.atTime(LocalTime.MIN),
-                    checkoutDate.atTime(LocalTime.NOON)
+                room.id.notIn(
+                    JPAExpressions.select(room.id)
+                        .from(room)
+                        .leftJoin(reservation).on(room.id.eq(reservation.room.id))
+                        .where(
+                            reservation.checkinDate.between(
+                                checkinDate.atTime(LocalTime.MIN),
+                                checkoutDate.atTime(LocalTime.NOON)
+                            )
+                                .or(
+                                    reservation.checkoutDate.between(
+                                        checkinDate.atTime(LocalTime.MIN),
+                                        checkoutDate.atTime(LocalTime.NOON)
+                                    )
+                                )
+                        )
                 )
-                    .and(
-                        reservation.checkoutDate.notBetween(
-                            checkinDate.atTime(LocalTime.MIN),
-                            checkoutDate.atTime(LocalTime.NOON)
-                        )
-                    )
-                        )
-                    .or(reservation.id.isNull)
             )
 
         val roomContents: MutableList<Room>
@@ -98,25 +103,7 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
         try {
             roomContents = queryFactory
                 .selectFrom(room)
-                .where(
-                    room.id.notIn(
-                        JPAExpressions.select(room.id)
-                            .from(room)
-                            .leftJoin(reservation).on(room.id.eq(reservation.room.id))
-                            .where(
-                                reservation.checkinDate.between(
-                                    checkinDate.atTime(LocalTime.MIN),
-                                    checkoutDate.atTime(LocalTime.NOON)
-                                )
-                                    .and(
-                                        reservation.checkoutDate.between(
-                                            checkinDate.atTime(LocalTime.MIN),
-                                            checkoutDate.atTime(LocalTime.NOON)
-                                        )
-                                    )
-                            )
-                    )
-                )
+                .where(roomWhereClause)
                 .offset(pageable.offset)
                 .orderBy(*getOrderSpecifier(pageable, room))
                 .fetch()
@@ -124,9 +111,6 @@ class CustomRoomRepositoryImpl : CustomRoomRepository, QueryDslSupport() {
             totalCount = queryFactory
                 .select(room.count())
                 .from(room)
-                .leftJoin(room.accommodation, accommodation)
-                .leftJoin(reservation)
-                .on(reservation.room.id.eq(room.id))
                 .where(roomWhereClause)
                 .fetchOne() ?: 0L
         } catch (e: IllegalArgumentException) {
