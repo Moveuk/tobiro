@@ -5,7 +5,7 @@ import com.sparta.tobiro.domain.accommodation.model.Room
 data class RoomResponse(
     val id: Long,
     val accommodation: AccommodationDetailResponse,
-    val roomPicUrls: String,
+    val roomPicUrls: MutableList<String>,
     val name: String,
     val price: Int,
     val description: String,

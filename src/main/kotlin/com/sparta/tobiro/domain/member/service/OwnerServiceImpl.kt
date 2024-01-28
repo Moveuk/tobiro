@@ -1,6 +1,5 @@
 package com.sparta.tobiro.domain.member.service
 
-import com.sparta.tobiro.domain.accommodation.model.Accommodation
 import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.member.dto.request.LoginRequest
 import com.sparta.tobiro.domain.member.dto.request.OwnerSignUpRequest
@@ -16,6 +15,7 @@ import com.sparta.tobiro.domain.member.repository.OwnerRecentPasswordsRepository
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.infra.aws.S3Service
 import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
@@ -30,11 +30,12 @@ class OwnerServiceImpl(
     private val accommodationRepository: AccommodationRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin,
-    private val ownerRecentPasswordsRepository: OwnerRecentPasswordsRepository
+    private val ownerRecentPasswordsRepository: OwnerRecentPasswordsRepository,
+    private val s3Service: S3Service
 ) : OwnerService {
 
     @Transactional
-    override fun updatePassword(ownerId: Long, request: UpdateOwnerPasswordRequest): String  {
+    override fun updatePassword(ownerId: Long, request: UpdateOwnerPasswordRequest): String {
         val owner = ownerRepository.findById(ownerId).orElseThrow { ModelNotFoundException("Owner", ownerId) }
 
         if (!passwordEncoder.matches(request.ownerPassword, owner.password)) {
@@ -55,6 +56,7 @@ class OwnerServiceImpl(
         ownerRepository.save(owner)
         return "비밀번호 변경이 완료되었습니다"
     }
+
     override fun login(request: LoginRequest): LoginResponse {
         val owner = ownerRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Owner")
         if (owner.role.name != request.role) {
@@ -82,6 +84,11 @@ class OwnerServiceImpl(
         if (ownerRepository.existsByBusinessNumber(request.businessNumber)) {
             throw IllegalStateException("사업자번호가 이미 존재 합니다.")
         }
+        var uploadedImageStrings: MutableList<String>? = null
+        if (!request.isPicsEmpty()) {
+            uploadedImageStrings = s3Service.upload(request.accommodationPics!!, "owner").toMutableList()
+        }
+
         val owner = Owner(
             name = request.name,
             email = request.email,
@@ -95,17 +102,10 @@ class OwnerServiceImpl(
                 else -> throw IllegalArgumentException("잘못된 role을 입력하셨습니다.")
             }
         )
-        val accommodation = accommodationRepository.save(
-            Accommodation(
-                owner = owner,
-                category = request.category,
-                accommodationPicUrls = "https://imgur.com/a/tBAKHUn",
-                address = request.accommdationaddress,
-                tlno = request.accommdationtlno,
-                name = request.accommdationname,
-                description = request.description
-            )
-        )
+
+        request.toEntity(owner, request, uploadedImageStrings).let {
+            accommodationRepository.save(it)
+        }
         return ownerRepository.save(owner).toResponse()
     }
 
@@ -115,12 +115,20 @@ class OwnerServiceImpl(
             throw IllegalArgumentException("프로필 수정 권한이 없습니다")
         }
 
+        var uploadedImageStrings: MutableList<String>? = null
+        if (!request.isPicsEmpty()) {
+            uploadedImageStrings = s3Service.upload(request.profilePic!!, "owner").toMutableList()
+        }
+
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)
         owner.name = request.name
         owner.introduction = request.introduction
         owner.tlno = request.tlno
         owner.address = request.address
         owner.businessNumber = request.businessNumber
+        if (uploadedImageStrings != null) {
+            owner.profilePicUrl = uploadedImageStrings
+        }
         return ownerRepository.save(owner).toResponse()
     }
 

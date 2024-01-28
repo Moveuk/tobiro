@@ -14,6 +14,7 @@ import com.sparta.tobiro.domain.member.repository.MemberRecentPasswordsRepositor
 import com.sparta.tobiro.domain.member.repository.MemberRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.infra.aws.S3Service
 import com.sparta.tobiro.infra.security.UserPrincipal
 import com.sparta.tobiro.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
@@ -27,7 +28,8 @@ class MemberServiceImpl(
     private val memberRepository: MemberRepository,
     private val passwordEncoder: PasswordEncoder,
     private val memberRecentPasswordsRepository: MemberRecentPasswordsRepository,
-    private val jwtPlugin: JwtPlugin
+    private val jwtPlugin: JwtPlugin,
+    private val s3Service: S3Service
 ) : MemberService {
 
     @Transactional
@@ -95,17 +97,21 @@ class MemberServiceImpl(
     }
 
     override fun updateMemberProfile(memberId: Long, request: UpdateMemberProfileRequest): MemberResponse {
-        val authenticatedId: Long =(SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
-        if(memberId != authenticatedId) {
+        val authenticatedId: Long = (SecurityContextHolder.getContext().authentication.principal as UserPrincipal).id
+        if (memberId != authenticatedId) {
             throw IllegalArgumentException("프로필 수정 권한이 없습니다")
+        }
+        var uploadedImageStrings: MutableList<String>? = null
+        if (!request.isPicsEmpty()) {
+            uploadedImageStrings = s3Service.upload(request.profilePic!!, "member").toMutableList()
         }
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
         member.name = request.name
         member.introduction = request.introduction
         member.tlno = request.tlno
+        if (uploadedImageStrings != null) {
+            member.profilePicUrl = uploadedImageStrings
+        }
         return memberRepository.save(member).toResponse()
     }
 }
-
-//Password API 분리 하기
-

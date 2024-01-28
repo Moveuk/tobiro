@@ -1,6 +1,8 @@
 package com.sparta.tobiro.domain.member.dto.request
 
+import com.sparta.tobiro.domain.accommodation.model.Accommodation
 import com.sparta.tobiro.domain.accommodation.model.Category
+import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.domain.member.validation.ValidBusinessNumber
 import com.sparta.tobiro.domain.member.validation.ValidPassword
 import com.sparta.tobiro.domain.member.validation.ValidTlno
@@ -31,15 +33,31 @@ data class OwnerSignUpRequest(
     @field:ValidBusinessNumber
     var businessNumber: String,
 
-    var accommdationname: String,
+    var accommodationName: String,
 
-    var accommdationaddress: String,
+    var accommodationAddress: String,
 
-    var accommdationtlno:String,
+    var accommodationTlno: String,
 
     var category: Category,
 
     var description: String,
 
-    var accommodationPic: MultipartFile?
-)
+    var accommodationPics: MutableList<MultipartFile>
+) {
+    fun isPicsEmpty(): Boolean {
+        return accommodationPics?.get(0)?.originalFilename == ""
+    }
+
+    fun toEntity(owner: Owner, request: OwnerSignUpRequest, uploadedImageStrings: MutableList<String>?): Accommodation {
+        return Accommodation(
+            owner = owner,
+            category = request.category,
+            accommodationPicUrls = uploadedImageStrings ?: mutableListOf("https://imgur.com/a/tBAKHUn"),
+            address = request.accommodationAddress,
+            tlno = request.accommodationTlno,
+            name = request.accommodationName,
+            description = request.description
+        )
+    }
+}

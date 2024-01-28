@@ -14,9 +14,5 @@ data class MemberResponse(
 
     var role: String,
 
-    //var profilePicUrl: MultiPartFile ,
-
+    var profilePicUrl: MutableList<String>,
 )
-
-
-// MultiPartFile 클래스를 만들어서 사진 받은걸 URL 로 바꿔줘야한다

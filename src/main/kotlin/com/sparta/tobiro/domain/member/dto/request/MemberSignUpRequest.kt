@@ -4,7 +4,6 @@ import com.sparta.tobiro.domain.member.validation.ValidPassword
 import com.sparta.tobiro.domain.member.validation.ValidTlno
 import jakarta.validation.constraints.Email
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.multipart.MultipartFile
 
 @Validated
 data class MemberSignUpRequest(
@@ -23,6 +22,4 @@ data class MemberSignUpRequest(
     var tlno: String,
 
     var role: String,
-
-    var profilePic: MultipartFile?
 )

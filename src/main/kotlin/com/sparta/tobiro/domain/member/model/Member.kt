@@ -1,6 +1,7 @@
 package com.sparta.tobiro.domain.member.model
 
 import com.sparta.tobiro.domain.member.dto.response.MemberResponse
+import com.sparta.tobiro.global.StringMutableListConverter
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -25,7 +26,8 @@ class Member(
     var tlno: String,
 
     @Column(name = "profile_pic_url", nullable = false)
-    var profilePicUrl: String = "https://imgur.com/S8jQ6wN",
+    @Convert(converter = StringMutableListConverter::class)
+    var profilePicUrl: MutableList<String> = mutableListOf("https://imgur.com/S8jQ6wN"),
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -50,5 +52,6 @@ fun Member.toResponse(): MemberResponse {
         role = role.name,
         introduction = introduction,
         tlno = tlno,
+        profilePicUrl = profilePicUrl
     )
 }
