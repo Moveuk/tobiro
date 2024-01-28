@@ -1,5 +1,5 @@
 package com.sparta.tobiro.global.exception
 
-class UnauthorizedException(override val message: String) : RuntimeException(message) {
+data class UnauthorizedException(override val message: String) : RuntimeException(message) {
 
 }

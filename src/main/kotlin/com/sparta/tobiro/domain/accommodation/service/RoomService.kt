@@ -7,7 +7,9 @@ import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.accommodation.repository.RoomRepository
 import com.sparta.tobiro.global.exception.ModelNotFoundException
 import com.sparta.tobiro.global.exception.UnauthorizedException
+import com.sparta.tobiro.infra.aws.S3Service
 import com.sparta.tobiro.infra.security.UserPrincipal
+import kotlinx.coroutines.runBlocking
 import org.apache.coyote.BadRequestException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -18,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class RoomService(
     private val roomRepository: RoomRepository,
-    private val accommodationRepository: AccommodationRepository
+    private val accommodationRepository: AccommodationRepository,
+    private val s3Service: S3Service
 ) {
     fun getRooms(accommodationId: Long, pageable: Pageable, userprincipal: UserPrincipal): Page<RoomResponse> {
         val findAccommodation =
@@ -47,7 +50,13 @@ class RoomService(
             accommodationRepository
                 .findByIdOrNull(accommodationId) ?: throw ModelNotFoundException("Accommodation")
         if (findAccommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소에 대한 권한이 없습니다.")
-        return roomRepository.save(request.to(findAccommodation)).let {
+
+        var uploadedImageStrings: MutableList<String>? = null
+        if (!request.isPicsEmpty()) {
+            uploadedImageStrings = s3Service.upload(request.roomPics!!, "room").toMutableList()
+        }
+
+        return roomRepository.save(request.to(findAccommodation, uploadedImageStrings)).let {
             RoomResponse.from(it)
         }
 
@@ -57,7 +66,16 @@ class RoomService(
     fun updateRoom(roomId: Long, request: UpdateRoomRequest, userPrincipal: UserPrincipal): RoomResponse {
         val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
         if (findRoom.accommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
-        findRoom.update(request)
+
+        var uploadedImageStrings: MutableList<String>? = null
+        if (!request.isPicsEmpty()) {
+            runBlocking {
+                uploadedImageStrings = s3Service.upload(request.roomPics!!, "room").toMutableList()
+            }
+        }
+
+        findRoom.update(request, uploadedImageStrings)
+
         return RoomResponse.from(findRoom)
     }
 

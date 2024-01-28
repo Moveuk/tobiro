@@ -37,8 +37,7 @@ class MemberController(
     @PutMapping("/{memberId}/profile")
     fun updateMemberProfile(
         @PathVariable memberId:Long,
-        @Valid
-        @RequestBody updateMemberProfileRequest: UpdateMemberProfileRequest
+        @Valid @ModelAttribute updateMemberProfileRequest: UpdateMemberProfileRequest
     ): ResponseEntity<MemberResponse>{
         return ResponseEntity
             .status(HttpStatus.OK)

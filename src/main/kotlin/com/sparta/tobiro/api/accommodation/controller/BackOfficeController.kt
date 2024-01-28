@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -34,9 +35,13 @@ class BackOfficeController(
     }
 
     @PreAuthorize("hasRole('OWNER')")
-    @PutMapping("/my-accommodation")
+    @PutMapping(
+        "/my-accommodation",
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     fun updateMyAccommodation(
-        @RequestBody request: UpdateAccommodationRequest,
+        @ModelAttribute request: UpdateAccommodationRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<AccommodationDetailResponse> {
         return ResponseEntity
@@ -68,10 +73,14 @@ class BackOfficeController(
     }
 
     @PreAuthorize("hasRole('OWNER')")
-    @PostMapping("/accommodations/{accommodationId}/rooms")
+    @PostMapping(
+        "/accommodations/{accommodationId}/rooms",
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     fun createRoom(
         @PathVariable accommodationId: Long,
-        @RequestBody request: CreateRoomRequest,
+        @ModelAttribute request: CreateRoomRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<RoomResponse> {
         return ResponseEntity
@@ -80,10 +89,14 @@ class BackOfficeController(
     }
 
     @PreAuthorize("hasRole('OWNER')")
-    @PutMapping("/accommodations/{accommodationId}/rooms/{roomId}")
+    @PutMapping(
+        "/accommodations/{accommodationId}/rooms/{roomId}",
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     fun updateRoom(
         @PathVariable roomId: Long,
-        @RequestBody request: UpdateRoomRequest,
+        @ModelAttribute request: UpdateRoomRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<RoomResponse> {
         return ResponseEntity

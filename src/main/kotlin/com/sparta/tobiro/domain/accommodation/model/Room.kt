@@ -1,6 +1,7 @@
 package com.sparta.tobiro.domain.accommodation.model
 
 import com.sparta.tobiro.api.accommodation.dto.request.UpdateRoomRequest
+import com.sparta.tobiro.global.StringMutableListConverter
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -13,7 +14,8 @@ class Room(
     var accommodation: Accommodation,
 
     @Column(name = "room_pic_urls", nullable = false)
-    var roomPicUrls: String = "https://imgur.com/a/tBAKHUn",
+    @Convert(converter = StringMutableListConverter::class)
+    var roomPicUrls: MutableList<String> = mutableListOf("https://imgur.com/a/tBAKHUn"),
 
     @Column(name = "name", nullable = false)
     var name: String,
@@ -31,9 +33,9 @@ class Room(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    fun update(request: UpdateRoomRequest, _roomPicUrls: String = roomPicUrls) {
+    fun update(request: UpdateRoomRequest, uploadedImageStrings: MutableList<String>?) {
         name = request.name
-        roomPicUrls = _roomPicUrls
+        roomPicUrls = uploadedImageStrings ?: this.roomPicUrls
         price = request.price
         description = request.description
         maxOccupancy = request.maxOccupancy

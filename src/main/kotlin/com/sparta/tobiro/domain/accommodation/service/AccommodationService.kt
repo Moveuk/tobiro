@@ -8,6 +8,7 @@ import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.accommodation.repository.RoomRepository
 import com.sparta.tobiro.domain.member.repository.OwnerRepository
 import com.sparta.tobiro.global.exception.ModelNotFoundException
+import com.sparta.tobiro.infra.aws.S3Service
 import com.sparta.tobiro.infra.security.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -21,7 +22,8 @@ import java.time.LocalDate
 class AccommodationService(
     private val accommodationRepository: AccommodationRepository,
     private val roomRepository: RoomRepository,
-    private val ownerRepository: OwnerRepository
+    private val ownerRepository: OwnerRepository,
+    private val s3Service: S3Service
 ) {
     fun getMyAccommodation(principal: UserPrincipal): AccommodationDetailResponse{
         val findAccommodation = ownerRepository.findByIdOrNull(principal.id).let {
@@ -35,7 +37,13 @@ class AccommodationService(
         val findAccommodation = ownerRepository.findByIdOrNull(principal.id).let {
             accommodationRepository.findByOwner(it!!) ?: throw ModelNotFoundException("Accommodation")
         }
-        findAccommodation.update(request)
+
+        var uploadedImageStrings: MutableList<String>? = null
+        if (!request.isPicsEmpty()) {
+            uploadedImageStrings = s3Service.upload(request.accommodationPics, "accommodation").toMutableList()
+        }
+
+        findAccommodation.update(request, uploadedImageStrings)
 
         accommodationRepository.save(findAccommodation)
 

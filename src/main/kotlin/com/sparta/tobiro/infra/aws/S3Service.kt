@@ -18,7 +18,7 @@ class S3Service(
 
     @Throws(IOException::class)
     fun upload(
-        multipartFiles: List<MultipartFile>,
+        multipartFiles: MutableList<MultipartFile>,
         dir: String
     ): List<String> {
         return multipartFiles.map { multipartFile ->

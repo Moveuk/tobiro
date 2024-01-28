@@ -18,7 +18,5 @@ data class OwnerResponse(
 
     var businessNumber: String,
 
-    //var profilePicUrl: String,
-
-
+    var profilePicUrl: MutableList<String>,
 )

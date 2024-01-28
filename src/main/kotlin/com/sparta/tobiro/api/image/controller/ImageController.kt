@@ -1,6 +1,6 @@
-package com.sparta.tobiro.domain.image.controller
+package com.sparta.tobiro.api.image.controller
 
-import com.sparta.tobiro.domain.image.dto.UploadImageResponse
+import com.sparta.tobiro.api.image.dto.UploadImageResponse
 import com.sparta.tobiro.infra.aws.S3Service
 import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.runBlocking
@@ -19,7 +19,7 @@ class ImageController(
     private val s3Service: S3Service
 ) {
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun uploadImage(@RequestParam("images") multipartFiles: List<MultipartFile>): ResponseEntity<List<UploadImageResponse>> {
+    fun uploadImage(@RequestParam("images") multipartFiles: MutableList<MultipartFile>): ResponseEntity<List<UploadImageResponse>> {
         return runBlocking {
             ResponseEntity
                 .ok(s3Service.upload(multipartFiles, "image").map { UploadImageResponse(it) })

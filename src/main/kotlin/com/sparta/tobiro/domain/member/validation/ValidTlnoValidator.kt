@@ -6,11 +6,11 @@ import jakarta.validation.ConstraintValidatorContext
 class ValidTlnoValidator : ConstraintValidator<ValidTlno, String> {
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
 
-        val isValid = value != null && value.matches(Regex("^[0-9-]*$")) && value.length in 13..13
+        val isValid = value != null && value.matches(Regex("^[0-9-]*$")) && value.length in 11..13
 
         if (!isValid) {
             context?.disableDefaultConstraintViolation()
-            context?.buildConstraintViolationWithTemplate("핸드폰번호는 -포함 13자리입니다 . 숫자(0~9)로 구성 되어야 합니다.")
+            context?.buildConstraintViolationWithTemplate("번호는 -포함 13자리입니다 . 숫자(0~9)로 구성 되어야 합니다.")
                 ?.addConstraintViolation()
         }
         return isValid
