@@ -27,6 +27,8 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers(
+                    "/",
+                    "/index.html",
                     "/api/v1/images",
                     "/api/v1/members/signup",
                     "/api/v1/members/login",
