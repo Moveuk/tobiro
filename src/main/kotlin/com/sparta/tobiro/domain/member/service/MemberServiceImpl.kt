@@ -1,11 +1,11 @@
 package com.sparta.tobiro.domain.member.service
 
-import com.sparta.tobiro.domain.member.dto.request.LoginRequest
-import com.sparta.tobiro.domain.member.dto.request.MemberSignUpRequest
-import com.sparta.tobiro.domain.member.dto.request.UpdateMemberPasswordRequest
-import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
-import com.sparta.tobiro.domain.member.dto.response.LoginResponse
-import com.sparta.tobiro.domain.member.dto.response.MemberResponse
+import com.sparta.tobiro.api.member.dto.request.LoginRequest
+import com.sparta.tobiro.api.member.dto.request.MemberSignUpRequest
+import com.sparta.tobiro.api.member.dto.request.UpdateMemberPasswordRequest
+import com.sparta.tobiro.api.member.dto.request.UpdateMemberProfileRequest
+import com.sparta.tobiro.api.member.dto.response.LoginResponse
+import com.sparta.tobiro.api.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.model.Member
 import com.sparta.tobiro.domain.member.model.MemberRecentPasswords
 import com.sparta.tobiro.domain.member.model.Role

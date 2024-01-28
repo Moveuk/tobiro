@@ -5,6 +5,7 @@ import com.sparta.tobiro.api.accommodation.dto.request.UpdateRoomRequest
 import com.sparta.tobiro.api.accommodation.dto.response.RoomResponse
 import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.accommodation.repository.RoomRepository
+import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.global.exception.ModelNotFoundException
 import com.sparta.tobiro.global.exception.UnauthorizedException
 import com.sparta.tobiro.infra.aws.S3Service
@@ -23,12 +24,12 @@ class RoomService(
     private val accommodationRepository: AccommodationRepository,
     private val s3Service: S3Service
 ) {
-    fun getRooms(accommodationId: Long, pageable: Pageable, userprincipal: UserPrincipal): Page<RoomResponse> {
+    fun getRooms(accommodationId: Long, pageable: Pageable, userPrincipal: UserPrincipal): Page<RoomResponse> {
         val findAccommodation =
             accommodationRepository
                 .findByIdOrNull(accommodationId) ?: throw ModelNotFoundException("Accommodation", accommodationId)
 
-        if (findAccommodation.owner.id != userprincipal.id) throw UnauthorizedException("이 숙박업소에 대한 권한이 없습니다.")
+        checkBetweenOwnerAndLoginUser(findAccommodation.owner, userPrincipal)
 
         return roomRepository.findAllByPageableAndAccommodationId(pageable, accommodationId).map {
             RoomResponse.from(it)
@@ -40,7 +41,7 @@ class RoomService(
 
     fun getRoom(roomId: Long, userPrincipal: UserPrincipal): RoomResponse {
         val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
-        if (findRoom.accommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소에 대한 권한이 없습니다.")
+        checkBetweenOwnerAndLoginUser(findRoom.accommodation.owner, userPrincipal)
         return RoomResponse.from(findRoom)
     }
 
@@ -49,7 +50,7 @@ class RoomService(
         val findAccommodation =
             accommodationRepository
                 .findByIdOrNull(accommodationId) ?: throw ModelNotFoundException("Accommodation")
-        if (findAccommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소에 대한 권한이 없습니다.")
+        checkBetweenOwnerAndLoginUser(findAccommodation.owner, userPrincipal)
 
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
@@ -65,7 +66,7 @@ class RoomService(
     @Transactional
     fun updateRoom(roomId: Long, request: UpdateRoomRequest, userPrincipal: UserPrincipal): RoomResponse {
         val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
-        if (findRoom.accommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
+        checkBetweenOwnerAndLoginUser(findRoom.accommodation.owner, userPrincipal)
 
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
@@ -82,8 +83,11 @@ class RoomService(
     @Transactional
     fun deleteRoom(roomId: Long, userPrincipal: UserPrincipal) {
         val findRoom = roomRepository.findByIdOrNull(roomId) ?: throw ModelNotFoundException("Room", roomId)
-        if (findRoom.accommodation.owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
+        checkBetweenOwnerAndLoginUser(findRoom.accommodation.owner, userPrincipal)
         roomRepository.delete(findRoom)
     }
 
+    private fun checkBetweenOwnerAndLoginUser(owner: Owner, userPrincipal: UserPrincipal) {
+        if (owner.id != userPrincipal.id) throw UnauthorizedException("이 숙박업소 객실에 대한 권한이 없습니다.")
+    }
 }

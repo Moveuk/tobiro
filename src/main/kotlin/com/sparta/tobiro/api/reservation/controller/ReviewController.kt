@@ -1,8 +1,8 @@
 package com.sparta.tobiro.api.reservation.controller
 
-import com.sparta.tobiro.domain.reservation.dto.CreateReviewRequest
-import com.sparta.tobiro.domain.reservation.dto.ReviewResponse
-import com.sparta.tobiro.domain.reservation.dto.UpdateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.request.CreateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.response.ReviewResponse
+import com.sparta.tobiro.api.reservation.dto.request.UpdateReviewRequest
 import com.sparta.tobiro.domain.reservation.service.ReviewService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -19,7 +19,8 @@ class ReviewController(
     @PostMapping
     fun createReview(
             @Valid
-            @RequestBody createReviewRequest: CreateReviewRequest)
+            @RequestBody createReviewRequest: CreateReviewRequest
+    )
             : ResponseEntity<ReviewResponse> {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reviewService.createReview(createReviewRequest))
@@ -30,7 +31,8 @@ class ReviewController(
     fun updateReview(
             @PathVariable reviewId: Long,
             @Valid
-            @RequestBody updateReviewRequest: UpdateReviewRequest)
+            @RequestBody updateReviewRequest: UpdateReviewRequest
+    )
             : ResponseEntity<ReviewResponse> {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(reviewService.updateReview(reviewId, updateReviewRequest))

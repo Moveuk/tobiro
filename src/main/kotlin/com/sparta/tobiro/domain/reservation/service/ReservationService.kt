@@ -1,9 +1,9 @@
 package com.sparta.tobiro.domain.reservation.service
 
+import com.sparta.tobiro.api.reservation.dto.request.CreateReservationRequest
+import com.sparta.tobiro.api.reservation.dto.response.ReservationResponse
 import com.sparta.tobiro.domain.accommodation.repository.RoomRepository
 import com.sparta.tobiro.domain.member.repository.MemberRepository
-import com.sparta.tobiro.domain.reservation.dto.CreateReservationRequest
-import com.sparta.tobiro.domain.reservation.dto.ReservationResponse
 import com.sparta.tobiro.domain.reservation.repository.ReservationRepository
 import com.sparta.tobiro.global.exception.InvalidCredentialException
 import com.sparta.tobiro.global.exception.ModelNotFoundException

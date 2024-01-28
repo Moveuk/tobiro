@@ -1,8 +1,8 @@
 package com.sparta.tobiro.domain.reservation.service
 
-import com.sparta.tobiro.domain.reservation.dto.CreateReviewRequest
-import com.sparta.tobiro.domain.reservation.dto.ReviewResponse
-import com.sparta.tobiro.domain.reservation.dto.UpdateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.request.CreateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.request.UpdateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.response.ReviewResponse
 
 interface ReviewService {
 

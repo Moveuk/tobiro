@@ -1,8 +1,8 @@
 package com.sparta.tobiro.domain.reservation.service
 
-import com.sparta.tobiro.domain.reservation.dto.CreateReviewRequest
-import com.sparta.tobiro.domain.reservation.dto.ReviewResponse
-import com.sparta.tobiro.domain.reservation.dto.UpdateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.request.CreateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.request.UpdateReviewRequest
+import com.sparta.tobiro.api.reservation.dto.response.ReviewResponse
 import com.sparta.tobiro.domain.reservation.model.Reservation
 import com.sparta.tobiro.domain.reservation.model.Review
 import com.sparta.tobiro.domain.reservation.model.toResponse
@@ -39,7 +39,8 @@ class ReviewServiceImpl(
                         reservation = findReservation,
                         content = request.content,
                         rating = request.rating
-                )).toResponse()
+                )
+        ).toResponse()
     }
 
     @Transactional

@@ -1,6 +1,6 @@
 package com.sparta.tobiro.domain.member.model
 
-import com.sparta.tobiro.domain.member.dto.response.MemberResponse
+import com.sparta.tobiro.api.member.dto.response.MemberResponse
 import com.sparta.tobiro.global.StringMutableListConverter
 import com.sparta.tobiro.global.entity.BaseTimeEntity
 import jakarta.persistence.*
