@@ -1,6 +1,6 @@
 # 토비로 Tobiro - 토요일을 비롯한 일상의 로맨틱한 여행
 ## 👨‍👨‍👧 팀원 소개
-| [이동욱](https://github.com/kbsat) | [김찬모](https://github.com/chanmo231121) | [박규희](https://github.com/qordpsem) |
+| [이동욱](https://github.com/Moveuk) | [김찬모](https://github.com/chanmo231121) | [박규희](https://github.com/qordpsem) |
 |---------------------------------|----------------------------------------|------------------------------------|
 |![image](https://github.com/Moveuk/tobiro/assets/84966961/7959271c-1a22-4460-9ec2-85fd169c0497)|![image](https://github.com/Moveuk/tobiro/assets/84966961/c6b987c9-8c0f-494f-8a5b-0ba0d1377df0)|![image](https://github.com/Moveuk/tobiro/assets/84966961/61e5e367-863e-4ed5-b8a7-56a274f0d27d)|
 
