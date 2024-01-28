@@ -1,7 +1,7 @@
 package com.sparta.tobiro.api.reservation.controller
 
-import com.sparta.tobiro.domain.reservation.dto.CreateReservationRequest
-import com.sparta.tobiro.domain.reservation.dto.ReservationResponse
+import com.sparta.tobiro.api.reservation.dto.request.CreateReservationRequest
+import com.sparta.tobiro.api.reservation.dto.response.ReservationResponse
 import com.sparta.tobiro.domain.reservation.service.ReservationService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

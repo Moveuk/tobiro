@@ -1,11 +1,11 @@
 package com.sparta.tobiro.api.member.controller
 
-import com.sparta.tobiro.domain.member.dto.request.LoginRequest
-import com.sparta.tobiro.domain.member.dto.request.MemberSignUpRequest
-import com.sparta.tobiro.domain.member.dto.request.UpdateMemberPasswordRequest
-import com.sparta.tobiro.domain.member.dto.request.UpdateMemberProfileRequest
-import com.sparta.tobiro.domain.member.dto.response.LoginResponse
-import com.sparta.tobiro.domain.member.dto.response.MemberResponse
+import com.sparta.tobiro.api.member.dto.request.LoginRequest
+import com.sparta.tobiro.api.member.dto.request.MemberSignUpRequest
+import com.sparta.tobiro.api.member.dto.request.UpdateMemberPasswordRequest
+import com.sparta.tobiro.api.member.dto.request.UpdateMemberProfileRequest
+import com.sparta.tobiro.api.member.dto.response.LoginResponse
+import com.sparta.tobiro.api.member.dto.response.MemberResponse
 import com.sparta.tobiro.domain.member.service.MemberService
 import com.sparta.tobiro.infra.security.UserPrincipal
 import jakarta.validation.Valid
