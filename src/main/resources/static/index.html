@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tobiro - main</title>
+    <style>
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p,
+        h2,
+        h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2,
+        h3,
+        h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin-top: 1.4em;
+      }
+      h5,
+      h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol,
+      ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol,
+      li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, "Lucida Console", monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+        background-color: transparent;
+        overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code {
+        white-space: pre-wrap;
+      }
+      span.smallcaps {
+        font-variant: small-caps;
+      }
+      div.columns {
+        display: flex;
+        gap: min(4vw, 1.5em);
+      }
+      div.column {
+        flex: auto;
+        overflow-x: auto;
+      }
+      div.hanging-indent {
+        margin-left: 1.5em;
+        text-indent: -1.5em;
+      }
+      ul.task-list[class] {
+        list-style: none;
+      }
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math {
+        display: block;
+        text-align: center;
+        margin: 0.5rem auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>토비로 Tobiro</h1>
+    <h2>토요일을 비롯한 일상의 로맨틱한 여행</h2>
+    <h2>👨‍👨‍👧 팀원 소개</h2>
+
+    <table border="1">
+      <th><a href="https://github.com/Moveuk">이동욱</a></th>
+      <th><a href="https://github.com/chanmo231121">김찬모</a></th>
+      <th><a href="https://github.com/qordpsem">박규희</a></th>
+      <tr>
+        <td>
+          <img
+            src="https://github.com/Moveuk/tobiro/assets/84966961/7959271c-1a22-4460-9ec2-85fd169c0497"
+            alt="image"
+          />
+        </td>
+        <td>
+          <img
+            src="https://github.com/Moveuk/tobiro/assets/84966961/c6b987c9-8c0f-494f-8a5b-0ba0d1377df0"
+            alt="image"
+          />
+        </td>
+        <td>
+          <img
+            src="https://github.com/Moveuk/tobiro/assets/84966961/61e5e367-863e-4ed5-b8a7-56a274f0d27d"
+            alt="image"
+          />
+        </td>
+      </tr>
+    </table>
+
+    <h2>📝 프로젝트 소개</h2>
+    <p>여행 숙박 예약 서비스 토요일을 비롯한 로맨틱한 여행</p>
+    <p>
+      여행을 좋아하는 세 명이 모인 이유로 시작되었으며 내일배움캠프가 끝나면
+      여행을 가고 싶어 시작하게 되었습니다.😀
+    </p>
+    <h2>🏁 개발 일정</h2>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/471a71d5-de4c-40f5-be22-efa76a00402a"
+        alt="image"
+      />
+    </p>
+    <p>1월 26일 ~ 27일 부족한 점 보완</p>
+    <h2>KPT 회고</h2>
+    <ul>
+      <li>1월 29일 월요일 작성 예정</li>
+    </ul>
+    <details>
+      <summary>KPT 형식</summary>
+      <div markdown="1">
+        <h3>Keep</h3>
+        <h3>Problem</h3>
+        <h3>Try</h3>
+      </div>
+    </details>
+
+    <h2>⚙️ Backend 개발환경</h2>
+    <ul>
+      <li>언어 : Kotlin 1.9.20 - Java version 17</li>
+      <li>프레임워크 : SpringBoot 3.2.0</li>
+      <li>빌드 툴 : gradle-8.5</li>
+      <li>데이터베이스 : Supabase</li>
+      <li>배포 서버 서비스 : Amazon EC2 - Ubuntu 22</li>
+      <li>형상 관리 : git</li>
+      <li>IDE : IntelliJ IDEA 2023.3 (Ultimate Edition)</li>
+    </ul>
+    <h2>🤝 협업 툴</h2>
+    <ul>
+      <li>zep / slack : 온라인 미팅 장소</li>
+      <li>노션 : 기능 명세 / 개발 일정 정리</li>
+      <li>디자인 툴 : Figma</li>
+      <li>ERD : Quick DBD 웹서비스</li>
+      <li>테스트 툴 : Postman</li>
+    </ul>
+    <h2>와이어프레임</h2>
+    <h3>전체</h3>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/5dbc8f6d-cb62-47a2-b2a0-efebacd35b9d"
+        alt="image"
+      />
+    </p>
+    <h3>유저</h3>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/2da4d035-71cb-402e-b0e5-aad86ef09d86"
+        alt="image"
+      />
+    </p>
+    <h3>서비스</h3>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/e20948de-1963-49f4-8f61-30f3c6fca2fd"
+        alt="image"
+      />
+    </p>
+    <h3>백오피스</h3>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/1cc41b6c-6b91-4ff9-a63e-8901846a2202"
+        alt="image"
+      />
+    </p>
+    <h2>ERD</h2>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/b7793122-de8f-4941-a08d-fe513279f39b"
+        alt="image"
+      />
+    </p>
+    <h2>📚 Package 구조</h2>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/1e4ee93e-40f3-440f-bafe-0130f2faba3c"
+        alt="image"
+      />
+    </p>
+    <h2>구현 기능</h2>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/042f1092-8017-415a-a9a3-3b757e152d4b"
+        alt="image"
+      />
+    </p>
+    <h2>주요 기능 리뷰</h2>
+    <h3>1. 최근 비밀번호 검증 로직</h3>
+    <ul>
+      <li>
+        회원이 비밀번호를 바꾸려할 때 최근 3회 안에 사용한 비밀번호는
+        못사용하도록 하는 로직
+        <ul>
+          <li>
+            <img
+              src="https://github.com/Moveuk/tobiro/assets/84966961/aac46d48-d68d-4cbe-a4cc-21ec8b369d19"
+              alt="image"
+            />
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <h3>2. 숙박업소 검색 기능 - QueryDSL 도입</h3>
+    <ul>
+      <li>
+        숙박업소를 검색할 때 옵션으로 두어야하는 설정들이 많아 동적 쿼리 구현이
+        필수적이었고, JPA와 JQPL 만으로는 개발 효율이 나오지 않는다고 판단하여
+        QueryDSL 라이브러리 도임
+        <ul>
+          <li>
+            <img
+              src="https://github.com/Moveuk/tobiro/assets/84966961/7233e7b8-c792-4aaa-aa0f-ab8e8ba3eee5"
+              alt="image"
+            />
+          </li>
+          <li>
+            <img
+              src="https://github.com/Moveuk/tobiro/assets/84966961/f718c8aa-3016-4b7b-a27b-b6777972bd0d"
+              alt="image"
+            />
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <h3>3. 배포</h3>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/715ffda8-0cb8-4e1b-9421-2d3fbbbb9305"
+        alt="image"
+      />
+    </p>
+    <h3>4. 반복되는 코드 리팩토링</h3>
+    <p>
+      <img
+        src="https://github.com/Moveuk/tobiro/assets/84966961/bb67958c-1d00-4c55-ad30-e3b751847e43"
+        alt="image"
+      />
+    </p>
+  </body>
+</html>

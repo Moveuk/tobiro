@@ -22,7 +22,7 @@ allOpen {
 }
 
 group = "com.sparta"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -56,6 +56,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     implementation("com.querydsl:querydsl-jpa:$queryDslVersion:jakarta")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+    implementation("org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE")
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
 //    runtimeOnly("com.h2database:h2")
     runtimeOnly("org.postgresql:postgresql")
