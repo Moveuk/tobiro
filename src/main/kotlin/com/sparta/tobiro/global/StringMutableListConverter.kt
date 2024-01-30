@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sparta.tobiro.global.exception.BusinessLogicException
 import jakarta.persistence.AttributeConverter
+import java.io.IOException
 
 
 class StringMutableListConverter : AttributeConverter<MutableList<String>, String> {
@@ -24,7 +25,7 @@ class StringMutableListConverter : AttributeConverter<MutableList<String>, Strin
     override fun convertToEntityAttribute(dbData: String?): MutableList<String> {
         try {
             return mapper.readValue(dbData ?: "", object : TypeReference<MutableList<String>>() {})
-        } catch (e: JsonProcessingException) {
+        } catch (e: IOException) {
             throw BusinessLogicException("string을 list로 변환 실패")
         }
     }
