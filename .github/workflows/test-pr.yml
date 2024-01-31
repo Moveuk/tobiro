@@ -1,0 +1,28 @@
+name: test every pr
+on:
+  workflow_dispatch:
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: setup jdk
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Set YML
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          find src
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+      - name: gradlew test
+        run: ./gradlew test
