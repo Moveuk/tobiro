@@ -1,12 +1,12 @@
 package com.sparta.tobiro.domain.member.service
 
-import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.api.member.dto.request.LoginRequest
 import com.sparta.tobiro.api.member.dto.request.OwnerSignUpRequest
 import com.sparta.tobiro.api.member.dto.request.UpdateOwnerPasswordRequest
 import com.sparta.tobiro.api.member.dto.request.UpdateOwnerProfileRequest
 import com.sparta.tobiro.api.member.dto.response.LoginResponse
 import com.sparta.tobiro.api.member.dto.response.OwnerResponse
+import com.sparta.tobiro.domain.accommodation.repository.AccommodationRepository
 import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.domain.member.model.OwnerRecentPasswords
 import com.sparta.tobiro.domain.member.model.Role
@@ -86,7 +86,7 @@ class OwnerServiceImpl(
         }
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
-            uploadedImageStrings = s3Service.upload(request.accommodationPics!!, "owner").toMutableList()
+            uploadedImageStrings = s3Service.upload(request.accommodationPics, "owner").toMutableList()
         }
 
         val owner = Owner(
@@ -117,7 +117,7 @@ class OwnerServiceImpl(
 
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
-            uploadedImageStrings = s3Service.upload(request.profilePic!!, "owner").toMutableList()
+            uploadedImageStrings = s3Service.upload(request.profilePic, "owner").toMutableList()
         }
 
         val owner = ownerRepository.findByIdOrNull(ownerId) ?: throw ModelNotFoundException("Owner", ownerId)

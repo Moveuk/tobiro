@@ -1,11 +1,11 @@
 package com.sparta.tobiro.api.member.dto.request
 
-import com.sparta.tobiro.domain.accommodation.model.Accommodation
-import com.sparta.tobiro.domain.accommodation.model.Category
-import com.sparta.tobiro.domain.member.model.Owner
 import com.sparta.tobiro.api.member.validation.ValidBusinessNumber
 import com.sparta.tobiro.api.member.validation.ValidPassword
 import com.sparta.tobiro.api.member.validation.ValidTlno
+import com.sparta.tobiro.domain.accommodation.model.Accommodation
+import com.sparta.tobiro.domain.accommodation.model.Category
+import com.sparta.tobiro.domain.member.model.Owner
 import jakarta.validation.constraints.Email
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.multipart.MultipartFile
@@ -46,7 +46,7 @@ data class OwnerSignUpRequest(
     var accommodationPics: MutableList<MultipartFile>
 ) {
     fun isPicsEmpty(): Boolean {
-        return accommodationPics?.get(0)?.originalFilename == ""
+        return accommodationPics[0].originalFilename == ""
     }
 
     fun toEntity(owner: Owner, request: OwnerSignUpRequest, uploadedImageStrings: MutableList<String>?): Accommodation {
