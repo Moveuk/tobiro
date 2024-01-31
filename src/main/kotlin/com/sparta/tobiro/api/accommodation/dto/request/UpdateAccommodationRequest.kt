@@ -14,7 +14,7 @@ data class UpdateAccommodationRequest(
     val accommodationPics: MutableList<MultipartFile>,
 ) {
     fun isPicsEmpty(): Boolean {
-        return accommodationPics?.get(0)?.originalFilename == ""
+        return accommodationPics[0].originalFilename == ""
     }
     fun to(owner: Owner): Accommodation {
         return Accommodation(

@@ -103,7 +103,7 @@ class MemberServiceImpl(
         }
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
-            uploadedImageStrings = s3Service.upload(request.profilePic!!, "member").toMutableList()
+            uploadedImageStrings = s3Service.upload(request.profilePic, "member").toMutableList()
         }
         val member = memberRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
         member.name = request.name

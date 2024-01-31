@@ -54,7 +54,7 @@ class RoomService(
 
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
-            uploadedImageStrings = s3Service.upload(request.roomPics!!, "room").toMutableList()
+            uploadedImageStrings = s3Service.upload(request.roomPics, "room").toMutableList()
         }
 
         return roomRepository.save(request.to(findAccommodation, uploadedImageStrings)).let {
@@ -71,7 +71,7 @@ class RoomService(
         var uploadedImageStrings: MutableList<String>? = null
         if (!request.isPicsEmpty()) {
             runBlocking {
-                uploadedImageStrings = s3Service.upload(request.roomPics!!, "room").toMutableList()
+                uploadedImageStrings = s3Service.upload(request.roomPics, "room").toMutableList()
             }
         }
 

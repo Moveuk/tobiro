@@ -10,6 +10,6 @@ class UpdateRoomRequest(
     val roomPics: MutableList<MultipartFile>,
 ) {
     fun isPicsEmpty(): Boolean {
-        return roomPics?.get(0)?.originalFilename == ""
+        return roomPics[0].originalFilename == ""
     }
 }
