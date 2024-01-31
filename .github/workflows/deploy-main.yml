@@ -26,7 +26,7 @@ jobs:
           project: moveuk/tobiro
           stage: main
           yaml: |
-            name: tobiro:1.0.1-SNAPSHOT
+            name: tobiro
             app: java@17
             options:
               ports: 8080
