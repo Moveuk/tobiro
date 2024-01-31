@@ -22,6 +22,6 @@ data class UpdateOwnerProfileRequest(
     var profilePic: MutableList<MultipartFile>
 ) {
     fun isPicsEmpty(): Boolean {
-        return profilePic?.get(0)?.originalFilename == ""
+        return profilePic[0].originalFilename == ""
     }
 }
